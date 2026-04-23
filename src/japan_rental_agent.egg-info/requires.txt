@@ -1,0 +1,8 @@
+langgraph>=0.3.0
+pydantic>=2.7.0
+pydantic-settings>=2.2.1
+python-dotenv>=1.0.1
+streamlit>=1.44.0
+
+[dev]
+pytest>=8.1.1

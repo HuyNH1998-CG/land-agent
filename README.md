@@ -1,0 +1,63 @@
+# Japan Rental Agent
+
+Base structure for a chat agent that helps users find rental housing in Japan.
+
+## Current status
+
+This repository currently provides:
+
+- project layout for `ui`, `agent`, `tools`, and `data`
+- shared request/response contracts
+- LangGraph workflow skeleton
+- Streamlit demo entrypoint
+- placeholder tool implementations that follow the expected interfaces
+
+Business logic is intentionally not implemented yet.
+
+## Project layout
+
+```text
+.
+|-- data/
+|   |-- exports/
+|   `-- README.md
+|-- src/japan_rental_agent/
+|   |-- agent/
+|   |-- contracts/
+|   |-- data/
+|   |-- domain/
+|   `-- tools/
+|-- tests/
+`-- ui/app.py
+```
+
+## Environment variables
+
+Expected keys:
+
+- `LLM_API_KEY`
+- `LLM_CHAT_MODEL`
+- `LLM_BASE_URL`
+- `LLM_EMBEDDING_MODEL`
+
+## Local setup
+
+```bash
+python -m venv .venv
+.venv\Scripts\activate
+pip install -e .[dev]
+```
+
+## Run Streamlit UI
+
+```bash
+streamlit run ui/app.py
+```
+
+## Next implementation steps
+
+1. Implement real query parsing and clarification rules.
+2. Connect local CSV or SQLite datasets.
+3. Implement search, enrichment, ranking, compare, and export logic.
+4. Wire the chosen Gemini-compatible model client into the agent flow.
+
