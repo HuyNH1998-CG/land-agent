@@ -33,12 +33,32 @@ Expected result:
 
 This calls the service directly and prints a short result summary.
 
+Note:
+
+- this smoke test intentionally disables the live Gemini client
+- it uses the local fallback model so the test can run without network access
+- use a separate integration test if you want to verify the real Gemini endpoint
+
 ```powershell
 @'
-from japan_rental_agent.agent import RentalAgentService
+from japan_rental_agent.agent import AgentDependencies, RentalAgentService
+from japan_rental_agent.agent.llm import FallbackAgentModel
+from japan_rental_agent.config import AppConfig
 from japan_rental_agent.contracts import AgentRequest
 
-service = RentalAgentService()
+config = AppConfig(llm_api_key=None)
+default_dependencies = AgentDependencies.from_config(config)
+service = RentalAgentService(
+    config=config,
+    dependencies=AgentDependencies(
+        config=config,
+        agent_model=FallbackAgentModel(),
+        parser_tool=None,
+        search_tool=default_dependencies.search_tool,
+        enrichment_tool=default_dependencies.enrichment_tool,
+        ranking_tool=default_dependencies.ranking_tool,
+    ),
+)
 response = service.handle_request(
     AgentRequest(
         session_id="smoke",
@@ -56,8 +76,8 @@ Expected result right now:
 
 ```text
 status=success
-reply=Project skeleton is ready. Search logic has not been implemented yet.
-tools=parser,search,enrichment,ranking
+reply=I found 0 rental candidates that match the current request.
+tools=search,llm.ranking_plan,enrichment,ranking,llm.response
 ```
 
 ## 4. Optional UI smoke test
@@ -77,4 +97,3 @@ You can also use the helper script:
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\smoke_test.ps1
 ```
-

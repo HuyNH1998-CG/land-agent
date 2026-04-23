@@ -5,6 +5,7 @@ Summary: Base project structure for a Japan rental chat agent.
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 Requires-Dist: langgraph>=0.3.0
+Requires-Dist: openai>=1.79.0
 Requires-Dist: pydantic>=2.7.0
 Requires-Dist: pydantic-settings>=2.2.1
 Requires-Dist: python-dotenv>=1.0.1

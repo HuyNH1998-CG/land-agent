@@ -13,7 +13,9 @@ class AppConfig(BaseSettings):
     llm_chat_model: str = Field(default="gemini-3-flash", alias="LLM_CHAT_MODEL")
     llm_base_url: str | None = Field(default=None, alias="LLM_BASE_URL")
     llm_embedding_model: str | None = Field(default=None, alias="LLM_EMBEDDING_MODEL")
+    llm_reasoning_effort: str | None = "low"
     default_top_k: int = 5
+    agent_max_retries: int = 1
     data_dir: Path = Path("data")
     export_dir: Path = Path("data/exports")
 
@@ -23,4 +25,3 @@ class AppConfig(BaseSettings):
         extra="ignore",
         populate_by_name=True,
     )
-
