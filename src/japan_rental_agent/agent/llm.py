@@ -93,11 +93,22 @@ class FallbackAgentModel:
     ) -> IntentExtractionOutput:
         constraints = dict(previous_filters)
         lowered = message.lower()
+        intent = "search"
+
+        if "compare" in lowered:
+            intent = "compare"
+        elif "export" in lowered or "download" in lowered:
+            intent = "export"
 
         if "tokyo" in lowered:
             constraints["city"] = "Tokyo"
+            constraints.setdefault("prefecture", "Tokyo")
         if "osaka" in lowered:
             constraints["city"] = "Osaka"
+            constraints.setdefault("prefecture", "Osaka")
+        if "sapporo" in lowered:
+            constraints["city"] = "Sapporo"
+            constraints.setdefault("prefecture", "Hokkaido")
         if "near station" in lowered or "gan ga" in lowered:
             constraints["near_station"] = True
 
@@ -110,14 +121,21 @@ class FallbackAgentModel:
             constraints["max_rent"] = int(man_match.group(1)) * 10000
 
         missing_fields: list[str] = []
-        if "city" not in constraints:
+        parser_selected_listing_ids = parser_hints.get("selected_listing_ids", []) if isinstance(parser_hints, dict) else []
+        if intent == "compare":
+            if not selected_listings and not parser_selected_listing_ids:
+                missing_fields.append("selected_listings")
+        elif "city" not in constraints:
             missing_fields.append("city")
 
+        output_format_hint = parser_hints.get("output_format") if isinstance(parser_hints, dict) else None
+
         return IntentExtractionOutput(
+            intent=intent,  # type: ignore[arg-type]
             normalized_query=message.strip(),
             constraints=constraints,
             missing_fields=missing_fields,
-            output_format=output_format,
+            output_format=output_format_hint or output_format,
             ranking_preferences=RankingPreferences(),
             confidence=0.35,
         )
@@ -130,9 +148,9 @@ class FallbackAgentModel:
         missing_fields: list[str],
         conversation_history: list[dict[str, str]],
     ) -> ClarificationOutput:
-        fields = ", ".join(missing_fields) if missing_fields else "a few more details"
+        fields = ", ".join(missing_fields) if missing_fields else "một vài thông tin bổ sung"
         return ClarificationOutput(
-            reply=f"Please tell me {fields} so I can continue the rental search.",
+            reply=f"Vui lòng cho tôi biết {fields} để tôi tiếp tục tìm nhà.",
             missing_fields=missing_fields,
             confidence=0.3,
         )
@@ -148,7 +166,7 @@ class FallbackAgentModel:
         preferences = RankingPreferences.model_validate(current_preferences or {})
         return RankingPlanOutput(
             preferences=preferences,
-            summary="Using default ranking weights in fallback mode.",
+            summary="Đang dùng bộ trọng số mặc định trong chế độ fallback.",
             confidence=0.3,
         )
 
@@ -163,11 +181,11 @@ class FallbackAgentModel:
     ) -> ResponseDraft:
         if listings:
             return ResponseDraft(
-                reply=f"I found {len(listings)} rental candidates that match the current request.",
+                reply=f"Tôi đã tìm được {len(listings)} lựa chọn thuê nhà phù hợp với yêu cầu hiện tại.",
                 confidence=0.35,
             )
         return ResponseDraft(
-            reply="I could not find any matching rental candidates yet. Please refine the filters and try again.",
+            reply="Tôi chưa tìm thấy lựa chọn phù hợp. Hãy nới ngân sách hoặc điều chỉnh bộ lọc rồi thử lại.",
             confidence=0.35,
         )
 
@@ -180,7 +198,7 @@ class FallbackAgentModel:
         last_failed_node: str | None,
     ) -> ErrorDraft:
         return ErrorDraft(
-            reply="I ran into a processing issue while handling the rental search. Please try again in a moment.",
+            reply="Tôi gặp lỗi trong quá trình xử lý yêu cầu tìm nhà. Hãy thử lại sau ít phút.",
             code="WORKFLOW_ERROR",
             confidence=0.2,
         )
@@ -260,7 +278,8 @@ class OpenAICompatibleGeminiAgentModel:
         return self._parse_structured(
             system_instruction=(
                 "You are the clarification node of a rental assistant. "
-                "Ask only for the minimum missing information needed to continue."
+                "Ask only for the minimum missing information needed to continue. "
+                "Respond in Vietnamese unless the user explicitly asked for another language."
             ),
             prompt=build_clarification_prompt(
                 raw_input=raw_input,
@@ -305,7 +324,8 @@ class OpenAICompatibleGeminiAgentModel:
         return self._parse_structured(
             system_instruction=(
                 "You are the final response node of a rental search assistant. "
-                "Write concise, helpful user-facing replies grounded in the provided data."
+                "Write concise, helpful user-facing replies grounded in the provided data. "
+                "Respond in Vietnamese unless the user explicitly asked for another language."
             ),
             prompt=build_response_prompt(
                 raw_input=raw_input,
@@ -328,7 +348,8 @@ class OpenAICompatibleGeminiAgentModel:
         return self._parse_structured(
             system_instruction=(
                 "You are the error-handling node of a rental search assistant. "
-                "Explain failures clearly and keep the reply short."
+                "Explain failures clearly and keep the reply short. "
+                "Respond in Vietnamese unless the user explicitly asked for another language."
             ),
             prompt=build_error_prompt(
                 raw_input=raw_input,

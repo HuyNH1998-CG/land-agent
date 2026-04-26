@@ -16,6 +16,8 @@ def test_service_bootstraps() -> None:
             search_tool=default_dependencies.search_tool,
             enrichment_tool=default_dependencies.enrichment_tool,
             ranking_tool=default_dependencies.ranking_tool,
+            comparison_tool=default_dependencies.comparison_tool,
+            export_tool=default_dependencies.export_tool,
         ),
     )
     response = service.handle_request(

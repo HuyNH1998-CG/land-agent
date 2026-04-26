@@ -1,0 +1,12 @@
+prefecture,city,ward,flood_risk_score,earthquake_risk_score,overall_safety_score
+Hokkaido,Sapporo,Chuo,2.1,4.0,7.6
+Hokkaido,Sapporo,Kita,3.2,3.8,7.1
+Hokkaido,Sapporo,Higashi,4.1,3.9,6.7
+Hokkaido,Sapporo,Shiroishi,4.5,3.7,6.4
+Hokkaido,Sapporo,Toyohira,3.8,3.8,6.8
+Hokkaido,Sapporo,Minami,2.4,4.3,7.4
+Hokkaido,Sapporo,Nishi,2.7,4.0,7.3
+Hokkaido,Sapporo,Atsubetsu,3.6,3.6,6.9
+Hokkaido,Sapporo,Teine,3.3,3.9,7.0
+Hokkaido,Sapporo,Kiyota,3.0,4.1,7.1
+

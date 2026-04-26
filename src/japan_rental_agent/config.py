@@ -18,6 +18,8 @@ class AppConfig(BaseSettings):
     agent_max_retries: int = 1
     data_dir: Path = Path("data")
     export_dir: Path = Path("data/exports")
+    chroma_dir: Path = Path("data/chroma")
+    floor_plan_dir: Path = Path("data/floor_plans")
 
     model_config = SettingsConfigDict(
         env_file=".env",

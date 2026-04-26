@@ -9,6 +9,7 @@ This repository currently provides:
 - project layout for `ui`, `agent`, `tools`, and `data`
 - shared request/response contracts
 - LangGraph workflow skeleton
+- local Chroma vector store integration and seeding utilities
 - Streamlit demo entrypoint
 - placeholder tool implementations that follow the expected interfaces
 
@@ -54,10 +55,29 @@ pip install -e .[dev]
 streamlit run ui/app.py
 ```
 
+## Generate local mock data
+
+```bash
+python scripts/generate_sapporo_mock_data.py
+```
+
+This produces:
+
+- `data/rental_listings_demo.csv` with 264 Sapporo listings
+- `data/floor_plan_reference.csv`
+- shared SVG floor plans under `data/floor_plans/`
+
+## Seed Chroma locally
+
+```bash
+python scripts/seed_chroma.py
+```
+
+Seeded collections are stored under `data/chroma/`.
+
 ## Next implementation steps
 
 1. Implement real query parsing and clarification rules.
 2. Connect local CSV or SQLite datasets.
 3. Implement search, enrichment, ranking, compare, and export logic.
 4. Wire the chosen Gemini-compatible model client into the agent flow.
-

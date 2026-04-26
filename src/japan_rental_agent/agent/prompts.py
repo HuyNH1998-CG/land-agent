@@ -24,6 +24,7 @@ Rules:
 - Keep missing_fields limited to information genuinely needed before search.
 - Output search-ready constraints only. Do not invent values.
 - If the user asks to compare or export, set intent accordingly.
+- The user-facing language preference is Vietnamese. This affects downstream replies, not the extracted fields.
 
 Current user message:
 {message}
@@ -55,6 +56,7 @@ Rules:
 - Ask only for the missing information.
 - Keep it concise and natural.
 - Preserve the user's existing constraints.
+- Write the reply in Vietnamese unless the user explicitly requested another language.
 
 User request:
 {raw_input}
@@ -84,6 +86,7 @@ Rules:
 - Weights should reflect user priorities from the request.
 - Return balanced defaults if the request is vague.
 - Do not assume facts not present in the request or listings.
+- The user-facing language preference is Vietnamese, but the output schema remains unchanged.
 
 User request:
 {raw_input}
@@ -116,6 +119,7 @@ Rules:
 - If there are no results, say that clearly and suggest refining filters.
 - Do not claim data that is not present.
 - Keep the answer suitable for chat output.
+- Write the reply in Vietnamese unless the user explicitly requested another language.
 
 Original request:
 {raw_input}
@@ -147,6 +151,7 @@ Rules:
 - Be transparent that the request could not be completed.
 - Suggest one practical next step.
 - Avoid technical jargon unless needed.
+- Write the reply in Vietnamese unless the user explicitly requested another language.
 
 Original request:
 {raw_input}
@@ -160,4 +165,3 @@ Retry count:
 Failed node:
 {last_failed_node}
 """
-

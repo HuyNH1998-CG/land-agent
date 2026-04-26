@@ -38,6 +38,7 @@ def normalize_listing_payload(item: dict[str, Any], index: int) -> dict[str, Any
         "pet_allowed": item.get("pet_allowed"),
         "lat": item.get("lat"),
         "lng": item.get("lng"),
+        "floor_plan_asset": item.get("floor_plan_asset"),
         "score": item.get("score"),
         "score_breakdown": item.get("score_breakdown"),
     }
@@ -49,4 +50,3 @@ def normalize_listings(items: list[dict[str, Any]], top_k: int) -> list[dict[str
     for index, item in enumerate(items[:top_k], start=1):
         normalized.append(normalize_listing_payload(item, index=index))
     return normalized
-

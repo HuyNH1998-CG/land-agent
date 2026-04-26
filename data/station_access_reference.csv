@@ -1,0 +1,18 @@
+station,prefecture,city,ward,line_group,major_hub,avg_commute_to_sapporo_min,airport_access_min,walkability_score,shopping_convenience_score,winter_transit_reliability_score,lat,lng
+Sapporo,Hokkaido,Sapporo,Kita,JR Hakodate;Namboku;Toho,true,0,37,9.6,9.8,9.1,43.0687,141.3509
+Odori,Hokkaido,Sapporo,Chuo,Namboku;Toho;Tozai,true,2,39,9.8,9.9,9.0,43.0608,141.3554
+Susukino,Hokkaido,Sapporo,Chuo,Namboku;Streetcar,false,4,41,9.3,9.5,8.7,43.0558,141.3538
+Maruyama-Koen,Hokkaido,Sapporo,Chuo,Tozai,false,9,46,8.7,8.4,8.8,43.0554,141.3147
+Kita 24 Jo,Hokkaido,Sapporo,Kita,Namboku,false,8,45,8.4,8.1,8.7,43.0892,141.3438
+Asabu,Hokkaido,Sapporo,Kita,Namboku,false,11,48,8.0,7.8,8.5,43.1005,141.3413
+Higashi-Kuyakusho-Mae,Hokkaido,Sapporo,Higashi,Toho,false,7,44,8.3,8.0,8.6,43.0708,141.3646
+Shiroishi,Hokkaido,Sapporo,Shiroishi,Tozai;Toho,false,10,46,8.1,7.9,8.5,43.0475,141.4131
+Nango 7-chome,Hokkaido,Sapporo,Shiroishi,Tozai,false,13,49,7.8,7.6,8.4,43.0388,141.3984
+Gakuen-Mae,Hokkaido,Sapporo,Toyohira,Toho,false,6,43,8.5,8.2,8.7,43.0518,141.3608
+Hiragishi,Hokkaido,Sapporo,Toyohira,Namboku,false,12,47,7.9,7.4,8.4,43.0361,141.3696
+Fukuzumi,Hokkaido,Sapporo,Toyohira,Toho,false,15,55,7.6,7.5,8.3,43.0198,141.4084
+Shin-Sapporo,Hokkaido,Sapporo,Atsubetsu,JR Chitose;Tozai,true,18,28,8.6,8.5,8.8,43.0380,141.4720
+Kotoni,Hokkaido,Sapporo,Nishi,JR Hakodate;Tozai,false,10,45,8.5,8.4,8.6,43.0819,141.3070
+Miyanosawa,Hokkaido,Sapporo,Nishi,Tozai,false,18,53,7.4,7.2,8.2,43.0894,141.2761
+Jieitai-Mae,Hokkaido,Sapporo,Minami,Namboku,false,22,56,6.8,6.4,8.0,42.9944,141.3508
+Teine,Hokkaido,Sapporo,Teine,JR Hakodate,false,16,49,7.2,7.1,8.1,43.1200,141.2437

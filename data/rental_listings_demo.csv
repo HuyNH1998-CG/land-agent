@@ -1,0 +1,265 @@
+listing_id,title,prefecture,city,ward,nearest_station,walk_min,rent_yen,management_fee,deposit,key_money,layout,area_m2,building_age,floor,pet_allowed,foreigner_friendly,available_from,lat,lng
+sap_001,Sapporo Station Compact 1K,Hokkaido,Sapporo,Kita,Sapporo,6,62000,4000,62000,0,1K,24.3,14,5,false,true,2026-05-01,43.0687,141.3509
+sap_002,Odori Smart Studio,Hokkaido,Sapporo,Chuo,Odori,4,58000,3000,58000,0,1R,22.1,18,7,false,true,2026-05-08,43.0608,141.3554
+sap_003,Susukino Night Access 1DK,Hokkaido,Sapporo,Chuo,Susukino,5,67000,5000,67000,67000,1DK,28.0,11,6,false,true,2026-05-15,43.0558,141.3538
+sap_004,Nishi 11-chome Budget 1K,Hokkaido,Sapporo,Chuo,Nishi 11-chome,3,54000,3000,0,0,1K,23.8,21,4,false,true,2026-05-10,43.0572,141.3414
+sap_005,Maruyama Koen Sunlit 1LDK,Hokkaido,Sapporo,Chuo,Maruyama-Koen,7,89000,6000,89000,89000,1LDK,37.5,9,3,false,true,2026-06-01,43.0554,141.3147
+sap_006,Kita 18 Jo Student Friendly 1K,Hokkaido,Sapporo,Kita,Kita 18 Jo,5,52000,2500,0,0,1K,21.4,19,2,false,true,2026-05-03,43.0797,141.3483
+sap_007,Kita 24 Jo Flexible 1DK,Hokkaido,Sapporo,Kita,Kita 24 Jo,4,61000,3500,30500,0,1DK,27.2,13,5,false,true,2026-05-20,43.0892,141.3438
+sap_008,Asabu Pet OK 1LDK,Hokkaido,Sapporo,Kita,Asabu,6,76000,4000,76000,0,1LDK,35.1,10,4,true,true,2026-05-25,43.1005,141.3413
+sap_009,Higashi Kuyakusho Compact 1K,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,5,56000,3000,56000,0,1K,24.0,16,6,false,true,2026-05-12,43.0708,141.3646
+sap_010,Motomachi Family Starter 1LDK,Hokkaido,Sapporo,Higashi,Motomachi,7,73000,4500,73000,73000,1LDK,34.7,8,3,false,true,2026-06-05,43.0901,141.3689
+sap_011,Kanjo-dori East Value 1DK,Hokkaido,Sapporo,Higashi,Kanjo-dori-Higashi,4,59000,3000,29500,0,1DK,26.5,15,5,false,true,2026-05-18,43.0780,141.3732
+sap_012,Shiroishi Walkup 1K,Hokkaido,Sapporo,Shiroishi,Shiroishi,6,55000,3000,55000,0,1K,23.5,20,3,false,true,2026-05-07,43.0475,141.4131
+sap_013,Higashi Sapporo Modern 1LDK,Hokkaido,Sapporo,Shiroishi,Higashi-Sapporo,5,78000,5000,78000,78000,1LDK,36.2,6,8,false,true,2026-06-10,43.0467,141.3958
+sap_014,Nango 7 Chome Practical 1DK,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,4,60000,3000,30000,0,1DK,27.0,14,4,false,true,2026-05-16,43.0388,141.3984
+sap_015,Nango 13 Chome Quiet 1LDK,Hokkaido,Sapporo,Shiroishi,Nango 13-chome,6,71000,4000,71000,0,1LDK,34.1,9,2,false,true,2026-05-28,43.0310,141.4138
+sap_016,Gakuen Mae Student 1R,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,5,50000,2500,0,0,1R,20.3,17,3,false,true,2026-05-04,43.0518,141.3608
+sap_017,Hiragishi South 1DK,Hokkaido,Sapporo,Toyohira,Hiragishi,6,62000,3500,62000,0,1DK,28.3,12,5,false,true,2026-05-14,43.0361,141.3696
+sap_018,Nakanoshima Riverside 1LDK,Hokkaido,Sapporo,Toyohira,Nakanoshima,5,74000,4500,74000,74000,1LDK,35.8,7,6,false,true,2026-06-03,43.0296,141.3655
+sap_019,Fukuzumi Spacious 2LDK,Hokkaido,Sapporo,Toyohira,Fukuzumi,8,95000,6000,95000,0,2LDK,50.4,11,4,true,true,2026-06-12,43.0198,141.4084
+sap_020,Shin Sapporo Access 1LDK,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,6,77000,5000,77000,0,1LDK,36.7,8,7,false,true,2026-05-22,43.0380,141.4720
+sap_021,Kotoni Convenience 1K,Hokkaido,Sapporo,Nishi,Kotoni,4,57000,3000,57000,0,1K,24.6,15,5,false,true,2026-05-11,43.0819,141.3070
+sap_022,Miyanosawa New Build 1LDK,Hokkaido,Sapporo,Nishi,Miyanosawa,7,82000,5000,82000,82000,1LDK,38.6,4,2,false,true,2026-06-08,43.0894,141.2761
+sap_023,Jieitai Mae Quiet 1DK,Hokkaido,Sapporo,Minami,Jieitai-Mae,6,63000,3500,31500,0,1DK,29.1,13,3,true,true,2026-05-27,42.9944,141.3508
+sap_024,Teine JR Commuter 2LDK,Hokkaido,Sapporo,Teine,Teine,9,86000,5000,86000,0,2LDK,52.0,10,3,true,true,2026-06-15,43.1200,141.2437
+sap_025,Nango 7-chome Bright 1K Mansion,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,8,46000,6000,0,0,1K,22.0,12,7,true,true,2026-06-07,43.044079,141.398354
+sap_026,Hiragishi Urban 1DK Residence,Hokkaido,Sapporo,Toyohira,Hiragishi,3,65000,6000,65000,0,1DK,28.5,26,2,true,true,2026-07-25,43.031713,141.366771
+sap_027,Shin-Sapporo Flexible 1LDK Garden,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,5,102000,2000,102000,0,1LDK,38.9,7,6,false,true,2026-07-03,43.044149,141.465561
+sap_028,Miyanosawa Practical 1R Garden,Hokkaido,Sapporo,Nishi,Miyanosawa,5,42000,5000,21000,0,1R,19.0,28,2,true,true,2026-08-21,43.084376,141.278341
+sap_029,Teine Practical 1LDK Court,Hokkaido,Sapporo,Teine,Teine,10,92000,2000,92000,0,1LDK,36.0,1,11,true,true,2026-05-26,43.122671,141.238215
+sap_030,Odori Urban 2LDK Place,Hokkaido,Sapporo,Chuo,Odori,8,129000,6000,64500,0,2LDK,56.6,25,1,false,false,2026-06-13,43.055022,141.357163
+sap_031,Maruyama-Koen Comfort 2LDK Mansion,Hokkaido,Sapporo,Chuo,Maruyama-Koen,4,128000,3000,0,0,2LDK,51.1,4,11,false,true,2026-06-08,43.051315,141.320413
+sap_032,Asabu Cozy 1K Square,Hokkaido,Sapporo,Kita,Asabu,4,51000,2000,0,0,1K,21.1,17,4,true,false,2026-05-21,43.097516,141.344337
+sap_033,Shiroishi Sunny 1LDK Place,Hokkaido,Sapporo,Shiroishi,Shiroishi,10,79000,4000,79000,79000,1LDK,34.1,26,6,false,false,2026-07-03,43.048430,141.409109
+sap_034,Gakuen-Mae Urban 1K Mansion,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,3,57000,5000,0,28500,1K,24.2,20,8,true,false,2026-05-25,43.054660,141.361203
+sap_035,Fukuzumi Smart 1K Mansion,Hokkaido,Sapporo,Toyohira,Fukuzumi,8,48000,6000,0,0,1K,26.2,21,3,false,true,2026-07-27,43.014650,141.410407
+sap_036,Kotoni Sunny 1K Court,Hokkaido,Sapporo,Nishi,Kotoni,6,51000,5000,51000,25500,1K,22.4,18,3,false,true,2026-05-25,43.078497,141.306595
+sap_037,Jieitai-Mae Bright 1DK Place,Hokkaido,Sapporo,Minami,Jieitai-Mae,5,65000,6000,0,0,1DK,32.1,18,8,false,true,2026-08-14,42.994514,141.349043
+sap_038,Sapporo Bright 1LDK Garden,Hokkaido,Sapporo,Kita,Sapporo,6,103000,6000,51500,0,1LDK,40.1,20,10,false,false,2026-06-18,43.071854,141.346886
+sap_039,Susukino Bright 2LDK Plaza,Hokkaido,Sapporo,Chuo,Susukino,3,127000,6000,0,63500,2LDK,52.3,22,6,false,true,2026-06-24,43.054550,141.349593
+sap_040,Kita 24 Jo Quiet 1DK Place,Hokkaido,Sapporo,Kita,Kita 24 Jo,10,61000,6000,30500,30500,1DK,26.8,8,10,false,true,2026-05-01,43.091581,141.348519
+sap_041,Higashi-Kuyakusho-Mae Flexible 1LDK Plaza,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,4,92000,5000,92000,0,1LDK,34.8,14,4,false,true,2026-06-22,43.068172,141.361748
+sap_042,Nango 7-chome Cozy 1R Court,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,9,44000,4000,44000,0,1R,22.3,6,5,false,false,2026-08-24,43.035517,141.402482
+sap_043,Hiragishi Modern 1LDK Terrace,Hokkaido,Sapporo,Toyohira,Hiragishi,3,91000,3000,91000,0,1LDK,37.8,15,2,false,true,2026-05-21,43.030831,141.369106
+sap_044,Shin-Sapporo Cozy 1K Square,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,9,55000,2000,55000,0,1K,26.8,12,4,false,true,2026-08-11,43.031698,141.467676
+sap_045,Miyanosawa Smart 1R Residence,Hokkaido,Sapporo,Nishi,Miyanosawa,5,42000,2500,21000,0,1R,20.5,21,7,false,true,2026-05-17,43.092063,141.280421
+sap_046,Teine Flexible 1DK Residence,Hokkaido,Sapporo,Teine,Teine,7,57000,2500,57000,57000,1DK,26.2,19,4,false,true,2026-06-04,43.125567,141.240324
+sap_047,Odori Modern 1K Plaza,Hokkaido,Sapporo,Chuo,Odori,9,58000,3000,0,29000,1K,27.2,23,5,true,false,2026-07-15,43.064823,141.351645
+sap_048,Maruyama-Koen Urban 1R Mansion,Hokkaido,Sapporo,Chuo,Maruyama-Koen,5,52000,5000,52000,0,1R,23.2,10,4,false,true,2026-08-27,43.061156,141.308265
+sap_049,Asabu Comfort 1K Place,Hokkaido,Sapporo,Kita,Asabu,7,47000,5000,0,23500,1K,25.7,28,10,false,true,2026-06-20,43.094654,141.344113
+sap_050,Shiroishi Smart 1LDK Terrace,Hokkaido,Sapporo,Shiroishi,Shiroishi,9,85000,6000,42500,0,1LDK,36.0,21,2,false,false,2026-06-28,43.048849,141.413055
+sap_051,Gakuen-Mae Sunny 1LDK Court,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,8,91000,2000,45500,45500,1LDK,36.5,6,12,true,true,2026-06-11,43.047242,141.366012
+sap_052,Fukuzumi Practical 1R Terrace,Hokkaido,Sapporo,Toyohira,Fukuzumi,4,42000,4000,42000,0,1R,19.0,20,4,false,true,2026-06-11,43.014404,141.407966
+sap_053,Kotoni Smart 1LDK Garden,Hokkaido,Sapporo,Nishi,Kotoni,3,99000,4000,0,99000,1LDK,39.5,19,6,true,true,2026-05-07,43.088088,141.304411
+sap_054,Jieitai-Mae Bright 2LDK Heights,Hokkaido,Sapporo,Minami,Jieitai-Mae,6,131000,2000,65500,65500,2LDK,55.2,10,8,false,true,2026-06-21,42.994601,141.349106
+sap_055,Sapporo Cozy 1DK Garden,Hokkaido,Sapporo,Kita,Sapporo,7,71000,3500,35500,0,1DK,29.6,20,5,false,true,2026-08-09,43.065212,141.354732
+sap_056,Susukino Sunny 1DK Place,Hokkaido,Sapporo,Chuo,Susukino,3,68000,5000,0,0,1DK,28.4,19,10,false,true,2026-06-02,43.050561,141.348400
+sap_057,Kita 24 Jo Smart 1DK Terrace,Hokkaido,Sapporo,Kita,Kita 24 Jo,7,73000,3000,36500,0,1DK,29.7,9,9,false,true,2026-05-30,43.094731,141.339095
+sap_058,Higashi-Kuyakusho-Mae Urban 1LDK Residence,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,4,96000,2500,0,0,1LDK,34.7,2,6,false,true,2026-08-16,43.065528,141.366646
+sap_059,Nango 7-chome Practical 1LDK Heights,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,7,99000,2000,49500,0,1LDK,39.0,4,2,true,false,2026-08-24,43.033515,141.398901
+sap_060,Hiragishi Comfort 1K Place,Hokkaido,Sapporo,Toyohira,Hiragishi,8,58000,3000,0,58000,1K,27.5,14,9,false,true,2026-08-13,43.033480,141.363860
+sap_061,Shin-Sapporo Comfort 1DK Heights,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,9,69000,3000,34500,0,1DK,32.7,23,5,false,true,2026-06-22,43.033032,141.474790
+sap_062,Miyanosawa Sunny 1DK Mansion,Hokkaido,Sapporo,Nishi,Miyanosawa,3,63000,4000,63000,63000,1DK,26.6,13,9,false,true,2026-06-28,43.084591,141.273776
+sap_063,Teine Comfort 1DK Place,Hokkaido,Sapporo,Teine,Teine,7,66000,2000,66000,66000,1DK,29.1,18,7,false,true,2026-06-24,43.118091,141.237789
+sap_064,Odori Quiet 2LDK Plaza,Hokkaido,Sapporo,Chuo,Odori,6,137000,2500,137000,0,2LDK,55.7,5,11,false,false,2026-05-14,43.067234,141.356730
+sap_065,Maruyama-Koen Comfort 1DK Garden,Hokkaido,Sapporo,Chuo,Maruyama-Koen,6,65000,2500,32500,32500,1DK,27.5,17,12,true,true,2026-06-26,43.054092,141.317853
+sap_066,Asabu Flexible 1DK Place,Hokkaido,Sapporo,Kita,Asabu,10,62000,3000,62000,0,1DK,27.8,2,5,true,false,2026-05-01,43.102737,141.345884
+sap_067,Shiroishi Practical 2LDK House,Hokkaido,Sapporo,Shiroishi,Shiroishi,5,134000,4000,0,134000,2LDK,53.2,3,11,false,true,2026-08-03,43.042176,141.416055
+sap_068,Gakuen-Mae Bright 1LDK Garden,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,5,88000,6000,0,88000,1LDK,35.9,25,8,false,true,2026-05-06,43.055486,141.357006
+sap_069,Fukuzumi Modern 1LDK Mansion,Hokkaido,Sapporo,Toyohira,Fukuzumi,4,90000,2000,90000,0,1LDK,34.3,10,9,false,false,2026-05-07,43.020160,141.409396
+sap_070,Kotoni Flexible 1K Garden,Hokkaido,Sapporo,Nishi,Kotoni,4,53000,2500,53000,0,1K,21.8,18,7,false,true,2026-08-28,43.075863,141.309085
+sap_071,Jieitai-Mae Flexible 1R Place,Hokkaido,Sapporo,Minami,Jieitai-Mae,5,48000,3000,24000,0,1R,22.7,11,12,false,true,2026-08-20,42.988390,141.356971
+sap_072,Sapporo Quiet 1K Square,Hokkaido,Sapporo,Kita,Sapporo,8,51000,3500,51000,25500,1K,22.5,20,7,true,false,2026-07-01,43.068930,141.345830
+sap_073,Susukino Modern 1K Mansion,Hokkaido,Sapporo,Chuo,Susukino,5,60000,6000,60000,60000,1K,27.5,26,5,false,true,2026-05-27,43.058060,141.350814
+sap_074,Kita 24 Jo Modern 1DK Mansion,Hokkaido,Sapporo,Kita,Kita 24 Jo,7,77000,2500,38500,77000,1DK,32.3,3,11,false,false,2026-05-08,43.092298,141.344119
+sap_075,Higashi-Kuyakusho-Mae Modern 1DK Garden,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,5,71000,4000,71000,71000,1DK,30.1,13,7,false,true,2026-08-07,43.068786,141.365357
+sap_076,Nango 7-chome Smart 1R Residence,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,10,42000,5000,21000,0,1R,21.5,3,6,true,true,2026-08-12,43.032401,141.397919
+sap_077,Hiragishi Sunny 1K Heights,Hokkaido,Sapporo,Toyohira,Hiragishi,6,50000,5000,0,0,1K,22.3,18,9,false,true,2026-05-11,43.034834,141.374011
+sap_078,Shin-Sapporo Comfort 1R Residence,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,6,45000,5000,22500,45000,1R,19.3,22,5,false,true,2026-06-12,43.043650,141.465566
+sap_079,Miyanosawa Quiet 1DK House,Hokkaido,Sapporo,Nishi,Miyanosawa,10,64000,6000,0,0,1DK,29.1,13,1,false,true,2026-05-26,43.093780,141.270430
+sap_080,Teine Bright 1DK Garden,Hokkaido,Sapporo,Teine,Teine,4,73000,2000,36500,36500,1DK,30.8,13,11,false,false,2026-05-25,43.126118,141.248248
+sap_081,Odori Cozy 1DK Square,Hokkaido,Sapporo,Chuo,Odori,8,70000,3000,70000,70000,1DK,28.7,17,1,false,false,2026-06-28,43.059036,141.360236
+sap_082,Maruyama-Koen Sunny 2LDK House,Hokkaido,Sapporo,Chuo,Maruyama-Koen,6,123000,3000,123000,0,2LDK,49.1,24,1,true,false,2026-06-09,43.054829,141.318956
+sap_083,Asabu Modern 1LDK Residence,Hokkaido,Sapporo,Kita,Asabu,5,90000,3500,90000,0,1LDK,34.3,13,8,false,true,2026-08-22,43.103929,141.337827
+sap_084,Shiroishi Smart 1R Heights,Hokkaido,Sapporo,Shiroishi,Shiroishi,5,50000,6000,0,0,1R,20.8,4,4,true,true,2026-08-12,43.050846,141.409853
+sap_085,Gakuen-Mae Practical 1K Terrace,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,9,51000,4000,51000,25500,1K,23.4,14,11,true,true,2026-07-15,43.052508,141.367253
+sap_086,Fukuzumi Flexible 1K Mansion,Hokkaido,Sapporo,Toyohira,Fukuzumi,3,56000,2000,0,56000,1K,22.8,1,8,false,true,2026-05-08,43.014535,141.408174
+sap_087,Kotoni Comfort 1LDK Garden,Hokkaido,Sapporo,Nishi,Kotoni,6,95000,2000,0,0,1LDK,34.7,6,1,false,true,2026-07-15,43.081767,141.309665
+sap_088,Jieitai-Mae Practical 1K Terrace,Hokkaido,Sapporo,Minami,Jieitai-Mae,9,45000,5000,0,45000,1K,22.8,15,10,false,true,2026-08-04,42.995127,141.353919
+sap_089,Sapporo Smart 1R Residence,Hokkaido,Sapporo,Kita,Sapporo,5,44000,5000,22000,0,1R,18.5,27,8,false,true,2026-06-07,43.064850,141.355577
+sap_090,Susukino Comfort 1LDK Terrace,Hokkaido,Sapporo,Chuo,Susukino,7,98000,2000,49000,0,1LDK,38.6,7,12,true,true,2026-05-13,43.051754,141.349326
+sap_091,Kita 24 Jo Quiet 1R House,Hokkaido,Sapporo,Kita,Kita 24 Jo,8,42000,4000,21000,0,1R,23.5,23,12,false,true,2026-08-07,43.093951,141.343120
+sap_092,Higashi-Kuyakusho-Mae Sunny 1K Court,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,9,47000,3000,47000,23500,1K,24.9,27,12,false,false,2026-05-29,43.064513,141.365917
+sap_093,Nango 7-chome Smart 1R Square,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,8,42000,6000,42000,42000,1R,21.0,14,7,false,true,2026-08-09,43.040150,141.402359
+sap_094,Hiragishi Quiet 1DK Terrace,Hokkaido,Sapporo,Toyohira,Hiragishi,4,70000,2500,35000,70000,1DK,29.0,4,4,true,true,2026-05-09,43.039997,141.371405
+sap_095,Shin-Sapporo Modern 1DK Terrace,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,4,71000,3500,35500,35500,1DK,27.3,6,10,false,true,2026-05-02,43.036097,141.470593
+sap_096,Miyanosawa Cozy 1LDK Residence,Hokkaido,Sapporo,Nishi,Miyanosawa,8,94000,3000,94000,0,1LDK,39.3,5,1,false,true,2026-06-18,43.089013,141.272888
+sap_097,Teine Urban 1K Mansion,Hokkaido,Sapporo,Teine,Teine,6,49000,2000,0,24500,1K,22.0,11,4,false,false,2026-05-08,43.122691,141.250071
+sap_098,Odori Smart 1DK House,Hokkaido,Sapporo,Chuo,Odori,9,64000,6000,32000,0,1DK,27.0,18,12,false,false,2026-08-23,43.055810,141.352944
+sap_099,Maruyama-Koen Sunny 2LDK Residence,Hokkaido,Sapporo,Chuo,Maruyama-Koen,7,120000,3000,120000,0,2LDK,48.3,28,2,false,false,2026-06-07,43.052227,141.317307
+sap_100,Asabu Flexible 1K House,Hokkaido,Sapporo,Kita,Asabu,5,53000,3000,0,26500,1K,25.2,22,8,false,true,2026-07-23,43.100195,141.340108
+sap_101,Shiroishi Flexible 1K Plaza,Hokkaido,Sapporo,Shiroishi,Shiroishi,9,46000,2500,46000,0,1K,24.2,21,9,false,true,2026-06-02,43.051791,141.413632
+sap_102,Gakuen-Mae Urban 1R Terrace,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,7,42000,4000,0,21000,1R,18.9,26,12,false,true,2026-08-19,43.049028,141.355808
+sap_103,Fukuzumi Practical 1LDK Heights,Hokkaido,Sapporo,Toyohira,Fukuzumi,8,96000,6000,0,0,1LDK,38.9,3,11,true,true,2026-05-13,43.020149,141.406995
+sap_104,Kotoni Modern 1LDK Court,Hokkaido,Sapporo,Nishi,Kotoni,6,101000,5000,50500,50500,1LDK,40.8,8,4,false,true,2026-05-23,43.087325,141.309543
+sap_105,Jieitai-Mae Cozy 1LDK Square,Hokkaido,Sapporo,Minami,Jieitai-Mae,7,87000,5000,87000,87000,1LDK,37.3,22,11,false,false,2026-07-25,42.997635,141.355649
+sap_106,Sapporo Urban 1DK House,Hokkaido,Sapporo,Kita,Sapporo,3,74000,6000,74000,37000,1DK,32.3,26,4,false,true,2026-08-26,43.063966,141.355907
+sap_107,Susukino Smart 1LDK Court,Hokkaido,Sapporo,Chuo,Susukino,7,90000,2000,0,0,1LDK,34.1,15,10,false,true,2026-05-22,43.061702,141.349419
+sap_108,Kita 24 Jo Practical 1DK Plaza,Hokkaido,Sapporo,Kita,Kita 24 Jo,9,66000,5000,33000,66000,1DK,29.3,16,1,false,true,2026-08-10,43.084933,141.338826
+sap_109,Higashi-Kuyakusho-Mae Flexible 1K Court,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,5,54000,6000,54000,0,1K,21.4,6,7,false,false,2026-07-05,43.069142,141.362950
+sap_110,Nango 7-chome Comfort 1DK Heights,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,8,69000,3000,69000,0,1DK,29.9,6,1,false,true,2026-06-28,43.038281,141.393137
+sap_111,Hiragishi Comfort 1DK Square,Hokkaido,Sapporo,Toyohira,Hiragishi,9,60000,5000,0,30000,1DK,28.2,22,7,false,true,2026-07-09,43.033123,141.364315
+sap_112,Shin-Sapporo Smart 1R Plaza,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,7,49000,3500,0,0,1R,18.2,3,5,false,true,2026-07-21,43.035430,141.475132
+sap_113,Miyanosawa Urban 1K Terrace,Hokkaido,Sapporo,Nishi,Miyanosawa,7,52000,2500,0,0,1K,25.8,12,4,true,false,2026-06-16,43.088553,141.273344
+sap_114,Teine Comfort 1K Residence,Hokkaido,Sapporo,Teine,Teine,4,52000,3500,26000,0,1K,22.4,6,10,false,true,2026-06-01,43.120754,141.238093
+sap_115,Odori Urban 1K Court,Hokkaido,Sapporo,Chuo,Odori,6,56000,5000,0,28000,1K,24.6,21,8,false,true,2026-06-25,43.059006,141.357973
+sap_116,Maruyama-Koen Quiet 1DK Terrace,Hokkaido,Sapporo,Chuo,Maruyama-Koen,9,71000,2500,71000,0,1DK,30.8,11,3,false,true,2026-05-27,43.049222,141.319716
+sap_117,Asabu Urban 2LDK Heights,Hokkaido,Sapporo,Kita,Asabu,10,130000,3500,130000,130000,2LDK,55.9,4,12,true,true,2026-08-05,43.102553,141.343021
+sap_118,Shiroishi Flexible 1K Mansion,Hokkaido,Sapporo,Shiroishi,Shiroishi,5,52000,3500,52000,26000,1K,22.4,12,7,false,true,2026-05-18,43.051258,141.410267
+sap_119,Gakuen-Mae Sunny 1DK Mansion,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,7,60000,5000,0,60000,1DK,26.8,27,5,false,true,2026-06-13,43.045393,141.360156
+sap_120,Fukuzumi Flexible 1DK Terrace,Hokkaido,Sapporo,Toyohira,Fukuzumi,4,75000,4000,0,75000,1DK,28.4,1,3,false,true,2026-07-16,43.025227,141.413055
+sap_121,Kotoni Comfort 1K Place,Hokkaido,Sapporo,Nishi,Kotoni,9,48000,6000,0,0,1K,24.0,27,2,false,true,2026-06-12,43.088206,141.312077
+sap_122,Jieitai-Mae Bright 1DK Square,Hokkaido,Sapporo,Minami,Jieitai-Mae,9,67000,3000,67000,0,1DK,31.8,4,11,false,false,2026-08-24,42.995742,141.354348
+sap_123,Sapporo Bright 1DK Terrace,Hokkaido,Sapporo,Kita,Sapporo,6,68000,5000,0,0,1DK,29.4,27,9,false,true,2026-06-13,43.068133,141.351160
+sap_124,Susukino Flexible 1R Place,Hokkaido,Sapporo,Chuo,Susukino,8,42000,3000,42000,42000,1R,21.9,17,6,false,false,2026-06-08,43.057864,141.350351
+sap_125,Kita 24 Jo Flexible 1R House,Hokkaido,Sapporo,Kita,Kita 24 Jo,7,50000,2000,25000,0,1R,22.5,4,2,false,false,2026-05-01,43.085945,141.343614
+sap_126,Higashi-Kuyakusho-Mae Flexible 1DK Residence,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,5,64000,6000,64000,0,1DK,30.9,26,10,false,true,2026-06-03,43.073631,141.362755
+sap_127,Nango 7-chome Quiet 1K House,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,3,55000,5000,27500,27500,1K,25.7,17,7,false,true,2026-06-07,43.036794,141.398325
+sap_128,Hiragishi Bright 1R House,Hokkaido,Sapporo,Toyohira,Hiragishi,6,42000,4000,42000,0,1R,19.1,23,2,false,true,2026-05-21,43.040627,141.367561
+sap_129,Shin-Sapporo Sunny 1LDK Residence,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,5,107000,6000,53500,0,1LDK,40.6,5,1,false,true,2026-05-16,43.034720,141.475940
+sap_130,Miyanosawa Sunny 1LDK Mansion,Hokkaido,Sapporo,Nishi,Miyanosawa,4,83000,6000,41500,83000,1LDK,34.8,26,6,false,true,2026-08-26,43.084631,141.280417
+sap_131,Teine Cozy 1R Square,Hokkaido,Sapporo,Teine,Teine,6,49000,2500,24500,49000,1R,22.8,8,5,false,true,2026-05-27,43.113957,141.243154
+sap_132,Odori Urban 1R Place,Hokkaido,Sapporo,Chuo,Odori,4,51000,3500,51000,25500,1R,24.0,26,5,false,true,2026-06-04,43.064083,141.360623
+sap_133,Maruyama-Koen Flexible 1LDK Place,Hokkaido,Sapporo,Chuo,Maruyama-Koen,4,103000,2000,0,0,1LDK,37.7,3,1,false,true,2026-06-09,43.051954,141.316530
+sap_134,Asabu Bright 1DK Place,Hokkaido,Sapporo,Kita,Asabu,10,64000,5000,64000,0,1DK,32.1,13,5,false,true,2026-08-22,43.104873,141.336545
+sap_135,Shiroishi Practical 1DK Place,Hokkaido,Sapporo,Shiroishi,Shiroishi,10,60000,6000,60000,0,1DK,26.7,8,3,false,true,2026-06-09,43.053545,141.410346
+sap_136,Gakuen-Mae Practical 1R Heights,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,3,42000,5000,21000,0,1R,20.1,26,7,false,false,2026-08-05,43.047425,141.367274
+sap_137,Fukuzumi Practical 1LDK Terrace,Hokkaido,Sapporo,Toyohira,Fukuzumi,3,95000,4000,95000,95000,1LDK,39.8,23,10,true,true,2026-07-02,43.014466,141.410826
+sap_138,Kotoni Bright 1K Terrace,Hokkaido,Sapporo,Nishi,Kotoni,5,57000,3000,28500,0,1K,26.6,15,12,false,false,2026-05-22,43.077619,141.301517
+sap_139,Jieitai-Mae Urban 1DK Residence,Hokkaido,Sapporo,Minami,Jieitai-Mae,9,60000,3000,60000,0,1DK,27.3,8,4,false,true,2026-06-02,42.998716,141.347774
+sap_140,Sapporo Sunny 1DK Heights,Hokkaido,Sapporo,Kita,Sapporo,3,77000,2500,0,38500,1DK,31.5,26,3,false,true,2026-05-08,43.069563,141.348085
+sap_141,Susukino Comfort 2LDK Plaza,Hokkaido,Sapporo,Chuo,Susukino,5,132000,4000,66000,66000,2LDK,51.7,5,7,false,true,2026-05-04,43.059418,141.348101
+sap_142,Kita 24 Jo Flexible 1LDK Court,Hokkaido,Sapporo,Kita,Kita 24 Jo,9,92000,5000,0,0,1LDK,38.9,8,7,false,true,2026-06-08,43.092772,141.341941
+sap_143,Higashi-Kuyakusho-Mae Quiet 1K Heights,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,7,56000,6000,28000,56000,1K,26.9,16,2,false,true,2026-06-19,43.067827,141.369307
+sap_144,Nango 7-chome Smart 1LDK Terrace,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,6,93000,5000,0,46500,1LDK,41.8,19,1,false,true,2026-08-24,43.039405,141.404431
+sap_145,Hiragishi Urban 1DK Place,Hokkaido,Sapporo,Toyohira,Hiragishi,4,71000,4000,0,0,1DK,31.3,8,5,false,true,2026-06-02,43.042482,141.375781
+sap_146,Shin-Sapporo Flexible 1LDK Mansion,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,6,103000,6000,103000,103000,1LDK,38.1,6,9,false,true,2026-07-19,43.039567,141.474197
+sap_147,Miyanosawa Bright 1K Garden,Hokkaido,Sapporo,Nishi,Miyanosawa,10,47000,2000,0,47000,1K,26.6,27,11,false,true,2026-07-16,43.092588,141.279361
+sap_148,Teine Modern 1LDK House,Hokkaido,Sapporo,Teine,Teine,8,91000,4000,0,45500,1LDK,35.9,6,2,true,true,2026-05-21,43.114501,141.247403
+sap_149,Odori Quiet 1DK House,Hokkaido,Sapporo,Chuo,Odori,7,71000,5000,71000,35500,1DK,28.1,19,7,false,true,2026-08-09,43.064966,141.352054
+sap_150,Maruyama-Koen Cozy 1LDK Court,Hokkaido,Sapporo,Chuo,Maruyama-Koen,10,91000,2500,45500,0,1LDK,36.2,3,7,false,true,2026-06-26,43.059109,141.309270
+sap_151,Asabu Modern 1R Residence,Hokkaido,Sapporo,Kita,Asabu,9,42000,3000,0,21000,1R,18.1,12,7,false,true,2026-07-12,43.102001,141.343847
+sap_152,Shiroishi Urban 1R Plaza,Hokkaido,Sapporo,Shiroishi,Shiroishi,10,43000,3000,43000,43000,1R,23.1,20,11,false,true,2026-08-08,43.049845,141.410855
+sap_153,Gakuen-Mae Modern 1LDK Heights,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,5,87000,3000,43500,0,1LDK,36.3,25,5,true,true,2026-08-08,43.052572,141.367010
+sap_154,Fukuzumi Bright 1DK Court,Hokkaido,Sapporo,Toyohira,Fukuzumi,7,66000,3000,66000,0,1DK,27.0,13,4,false,true,2026-08-15,43.021247,141.410451
+sap_155,Kotoni Practical 2LDK Place,Hokkaido,Sapporo,Nishi,Kotoni,6,129000,4000,64500,0,2LDK,50.7,6,5,false,true,2026-06-22,43.082952,141.305014
+sap_156,Jieitai-Mae Urban 1DK Mansion,Hokkaido,Sapporo,Minami,Jieitai-Mae,9,64000,5000,64000,64000,1DK,31.7,20,7,true,false,2026-06-05,43.000072,141.348539
+sap_157,Sapporo Smart 1LDK Square,Hokkaido,Sapporo,Kita,Sapporo,8,97000,6000,0,0,1LDK,39.3,20,4,false,true,2026-06-06,43.073696,141.347272
+sap_158,Susukino Sunny 1K Garden,Hokkaido,Sapporo,Chuo,Susukino,5,50000,6000,25000,0,1K,23.3,23,8,false,true,2026-07-16,43.056352,141.347502
+sap_159,Kita 24 Jo Quiet 2LDK Terrace,Hokkaido,Sapporo,Kita,Kita 24 Jo,6,120000,6000,0,120000,2LDK,50.8,28,11,false,true,2026-05-28,43.091718,141.349213
+sap_160,Higashi-Kuyakusho-Mae Bright 1DK House,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,9,67000,6000,0,0,1DK,30.7,3,6,false,false,2026-07-13,43.076821,141.362357
+sap_161,Nango 7-chome Flexible 1LDK House,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,5,93000,4000,93000,0,1LDK,37.7,6,4,false,true,2026-08-06,43.044228,141.397598
+sap_162,Hiragishi Sunny 1DK Garden,Hokkaido,Sapporo,Toyohira,Hiragishi,3,78000,2500,78000,0,1DK,30.8,2,11,true,true,2026-05-24,43.038595,141.366406
+sap_163,Shin-Sapporo Smart 1K Place,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,7,54000,5000,54000,54000,1K,25.4,23,3,false,true,2026-06-14,43.035937,141.468803
+sap_164,Miyanosawa Smart 1R Residence,Hokkaido,Sapporo,Nishi,Miyanosawa,10,43000,2500,21500,21500,1R,21.0,2,4,false,false,2026-06-05,43.094456,141.280749
+sap_165,Teine Smart 2LDK Terrace,Hokkaido,Sapporo,Teine,Teine,4,128000,3000,128000,128000,2LDK,53.9,16,9,true,false,2026-05-16,43.117782,141.238630
+sap_166,Odori Urban 1DK Square,Hokkaido,Sapporo,Chuo,Odori,10,66000,2500,33000,66000,1DK,26.3,22,10,true,true,2026-07-04,43.059113,141.361759
+sap_167,Maruyama-Koen Quiet 1K House,Hokkaido,Sapporo,Chuo,Maruyama-Koen,6,57000,3500,0,0,1K,24.9,9,11,false,true,2026-08-02,43.052771,141.318103
+sap_168,Asabu Sunny 1R Plaza,Hokkaido,Sapporo,Kita,Asabu,6,44000,5000,22000,22000,1R,22.6,11,7,false,true,2026-06-12,43.102089,141.337364
+sap_169,Shiroishi Smart 1DK Plaza,Hokkaido,Sapporo,Shiroishi,Shiroishi,10,62000,6000,0,0,1DK,28.2,13,3,false,true,2026-07-02,43.051296,141.410442
+sap_170,Gakuen-Mae Flexible 1LDK Terrace,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,9,98000,3000,0,0,1LDK,40.1,9,5,false,false,2026-05-22,43.047572,141.355408
+sap_171,Fukuzumi Sunny 1DK House,Hokkaido,Sapporo,Toyohira,Fukuzumi,6,60000,6000,0,30000,1DK,28.9,20,6,false,true,2026-05-17,43.024127,141.407164
+sap_172,Kotoni Smart 1LDK Plaza,Hokkaido,Sapporo,Nishi,Kotoni,7,98000,4000,0,0,1LDK,40.5,6,8,false,false,2026-06-21,43.080058,141.310999
+sap_173,Jieitai-Mae Cozy 1DK Heights,Hokkaido,Sapporo,Minami,Jieitai-Mae,9,64000,2000,32000,64000,1DK,27.2,2,12,false,true,2026-07-30,43.000669,141.351111
+sap_174,Sapporo Modern 1LDK Garden,Hokkaido,Sapporo,Kita,Sapporo,8,99000,4000,49500,0,1LDK,39.0,8,6,false,true,2026-08-19,43.062599,141.351034
+sap_175,Susukino Bright 1K Place,Hokkaido,Sapporo,Chuo,Susukino,7,47000,2000,47000,47000,1K,21.4,19,4,false,true,2026-06-27,43.060934,141.349984
+sap_176,Kita 24 Jo Modern 1DK Residence,Hokkaido,Sapporo,Kita,Kita 24 Jo,3,72000,4000,72000,0,1DK,32.4,21,2,true,true,2026-05-25,43.086080,141.344123
+sap_177,Higashi-Kuyakusho-Mae Modern 1LDK Mansion,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,5,88000,5000,44000,0,1LDK,34.4,27,4,false,true,2026-07-08,43.073069,141.358542
+sap_178,Nango 7-chome Modern 1K Square,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,4,49000,5000,0,24500,1K,23.2,22,2,true,false,2026-07-19,43.044369,141.394158
+sap_179,Hiragishi Sunny 1K Square,Hokkaido,Sapporo,Toyohira,Hiragishi,6,54000,3000,0,0,1K,27.1,19,5,true,true,2026-08-07,43.031277,141.368844
+sap_180,Shin-Sapporo Urban 1DK Place,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,6,66000,6000,0,0,1DK,26.5,17,12,true,true,2026-05-29,43.041537,141.465672
+sap_181,Miyanosawa Sunny 1DK Place,Hokkaido,Sapporo,Nishi,Miyanosawa,10,61000,5000,0,0,1DK,32.0,19,4,false,false,2026-07-09,43.093608,141.270818
+sap_182,Teine Smart 1LDK Terrace,Hokkaido,Sapporo,Teine,Teine,10,81000,2500,81000,40500,1LDK,35.7,17,5,true,true,2026-08-10,43.124500,141.246368
+sap_183,Odori Flexible 2LDK Residence,Hokkaido,Sapporo,Chuo,Odori,4,125000,2500,62500,0,2LDK,48.5,27,1,false,true,2026-07-03,43.057114,141.356371
+sap_184,Maruyama-Koen Modern 1LDK House,Hokkaido,Sapporo,Chuo,Maruyama-Koen,9,93000,2000,46500,0,1LDK,41.6,24,5,false,true,2026-06-26,43.055545,141.315473
+sap_185,Asabu Comfort 2LDK Court,Hokkaido,Sapporo,Kita,Asabu,6,127000,3500,63500,63500,2LDK,56.8,25,9,false,true,2026-08-29,43.095845,141.338757
+sap_186,Shiroishi Comfort 1K Court,Hokkaido,Sapporo,Shiroishi,Shiroishi,7,58000,3000,0,0,1K,25.9,10,4,false,true,2026-07-03,43.041678,141.407299
+sap_187,Gakuen-Mae Flexible 1LDK Terrace,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,10,86000,2500,86000,0,1LDK,39.2,24,7,false,false,2026-05-01,43.054259,141.360739
+sap_188,Fukuzumi Practical 2LDK Heights,Hokkaido,Sapporo,Toyohira,Fukuzumi,6,122000,3000,122000,61000,2LDK,54.2,27,4,false,false,2026-08-20,43.013692,141.403575
+sap_189,Kotoni Cozy 1DK Plaza,Hokkaido,Sapporo,Nishi,Kotoni,10,60000,3000,30000,30000,1DK,28.7,17,4,true,true,2026-07-12,43.079392,141.312793
+sap_190,Jieitai-Mae Comfort 1DK Heights,Hokkaido,Sapporo,Minami,Jieitai-Mae,3,73000,2000,73000,36500,1DK,32.8,8,12,true,false,2026-06-08,42.988452,141.355636
+sap_191,Sapporo Quiet 1DK Square,Hokkaido,Sapporo,Kita,Sapporo,5,84000,4000,42000,0,1DK,32.7,6,2,false,true,2026-05-30,43.069488,141.346562
+sap_192,Susukino Sunny 1LDK Court,Hokkaido,Sapporo,Chuo,Susukino,3,92000,4000,92000,0,1LDK,39.1,23,12,false,true,2026-08-08,43.051597,141.355803
+sap_193,Kita 24 Jo Smart 1R Mansion,Hokkaido,Sapporo,Kita,Kita 24 Jo,8,43000,4000,0,21500,1R,18.5,12,5,false,true,2026-08-15,43.088035,141.346902
+sap_194,Higashi-Kuyakusho-Mae Smart 1R Residence,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,10,44000,6000,0,0,1R,23.3,13,5,false,false,2026-07-08,43.067996,141.362212
+sap_195,Nango 7-chome Flexible 1LDK Square,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,3,93000,3000,0,46500,1LDK,36.5,15,6,false,true,2026-07-02,43.036233,141.396226
+sap_196,Hiragishi Flexible 1K House,Hokkaido,Sapporo,Toyohira,Hiragishi,9,43000,3500,0,21500,1K,23.2,19,10,false,false,2026-06-28,43.035732,141.366835
+sap_197,Shin-Sapporo Urban 1LDK Garden,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,7,98000,3500,0,0,1LDK,38.4,19,6,false,true,2026-08-02,43.043326,141.475915
+sap_198,Miyanosawa Quiet 1R Square,Hokkaido,Sapporo,Nishi,Miyanosawa,6,44000,2500,44000,0,1R,20.7,12,4,false,true,2026-05-01,43.092701,141.280196
+sap_199,Teine Urban 1LDK Residence,Hokkaido,Sapporo,Teine,Teine,6,87000,5000,87000,0,1LDK,38.9,23,10,false,true,2026-06-06,43.115519,141.244044
+sap_200,Odori Comfort 1R Garden,Hokkaido,Sapporo,Chuo,Odori,3,55000,3500,27500,0,1R,23.7,26,6,false,true,2026-06-22,43.056970,141.358113
+sap_201,Maruyama-Koen Sunny 1DK Square,Hokkaido,Sapporo,Chuo,Maruyama-Koen,6,68000,3500,34000,34000,1DK,26.2,11,8,false,true,2026-07-21,43.059464,141.308318
+sap_202,Asabu Flexible 1LDK Heights,Hokkaido,Sapporo,Kita,Asabu,5,101000,2500,50500,50500,1LDK,41.3,14,12,false,false,2026-06-11,43.096512,141.344737
+sap_203,Shiroishi Flexible 1LDK Place,Hokkaido,Sapporo,Shiroishi,Shiroishi,3,84000,2000,42000,42000,1LDK,34.7,27,11,true,true,2026-05-19,43.046649,141.408777
+sap_204,Gakuen-Mae Comfort 2LDK Square,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,5,120000,3500,60000,60000,2LDK,47.9,25,4,false,true,2026-07-13,43.053989,141.362843
+sap_205,Fukuzumi Bright 1K House,Hokkaido,Sapporo,Toyohira,Fukuzumi,4,54000,3500,27000,0,1K,26.3,27,12,false,false,2026-05-16,43.017956,141.406674
+sap_206,Kotoni Comfort 1K Residence,Hokkaido,Sapporo,Nishi,Kotoni,10,47000,5000,23500,23500,1K,23.4,26,5,true,true,2026-07-29,43.078920,141.302976
+sap_207,Jieitai-Mae Smart 1LDK House,Hokkaido,Sapporo,Minami,Jieitai-Mae,9,76000,3500,76000,0,1LDK,34.8,26,11,false,true,2026-05-12,42.997661,141.347493
+sap_208,Sapporo Quiet 2LDK Place,Hokkaido,Sapporo,Kita,Sapporo,3,131000,3500,0,0,2LDK,49.6,14,1,false,true,2026-06-30,43.074409,141.351338
+sap_209,Susukino Cozy 1K Court,Hokkaido,Sapporo,Chuo,Susukino,5,54000,3500,27000,27000,1K,22.3,16,2,false,true,2026-05-11,43.057068,141.352156
+sap_210,Kita 24 Jo Modern 1K Plaza,Hokkaido,Sapporo,Kita,Kita 24 Jo,6,62000,6000,62000,62000,1K,27.7,6,8,true,true,2026-07-11,43.084685,141.339242
+sap_211,Higashi-Kuyakusho-Mae Modern 1LDK Plaza,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,10,82000,3000,82000,0,1LDK,34.7,14,5,false,true,2026-06-16,43.068379,141.370002
+sap_212,Nango 7-chome Cozy 1DK Mansion,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,9,61000,3500,61000,0,1DK,28.8,16,7,false,true,2026-06-15,43.043545,141.394231
+sap_213,Hiragishi Comfort 1DK House,Hokkaido,Sapporo,Toyohira,Hiragishi,7,66000,5000,33000,66000,1DK,32.1,19,6,false,true,2026-05-03,43.038884,141.375381
+sap_214,Shin-Sapporo Modern 1R Plaza,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,5,53000,3500,0,26500,1R,20.2,8,5,true,true,2026-05-16,43.035754,141.468631
+sap_215,Miyanosawa Comfort 2LDK Mansion,Hokkaido,Sapporo,Nishi,Miyanosawa,8,119000,5000,0,59500,2LDK,50.8,18,3,false,true,2026-07-07,43.093653,141.275966
+sap_216,Teine Sunny 1R Plaza,Hokkaido,Sapporo,Teine,Teine,8,42000,5000,42000,42000,1R,21.4,17,7,false,true,2026-05-28,43.121533,141.237748
+sap_217,Odori Bright 1LDK Square,Hokkaido,Sapporo,Chuo,Odori,5,102000,2000,51000,51000,1LDK,41.5,28,5,false,true,2026-05-05,43.062247,141.351384
+sap_218,Maruyama-Koen Bright 1DK Plaza,Hokkaido,Sapporo,Chuo,Maruyama-Koen,4,70000,3500,0,0,1DK,26.9,14,4,false,true,2026-06-13,43.053948,141.310091
+sap_219,Asabu Flexible 1DK Mansion,Hokkaido,Sapporo,Kita,Asabu,8,57000,3500,57000,0,1DK,27.2,28,6,false,false,2026-08-29,43.096237,141.345667
+sap_220,Shiroishi Modern 2LDK Residence,Hokkaido,Sapporo,Shiroishi,Shiroishi,10,123000,2500,61500,123000,2LDK,54.6,25,2,false,true,2026-07-01,43.049550,141.417261
+sap_221,Gakuen-Mae Bright 1LDK Place,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,9,91000,3000,45500,0,1LDK,39.9,16,8,false,true,2026-07-17,43.047469,141.361389
+sap_222,Fukuzumi Quiet 1DK House,Hokkaido,Sapporo,Toyohira,Fukuzumi,3,62000,4000,31000,31000,1DK,26.6,17,1,false,true,2026-08-12,43.025370,141.407698
+sap_223,Kotoni Quiet 1LDK Heights,Hokkaido,Sapporo,Nishi,Kotoni,3,102000,2000,51000,0,1LDK,41.0,11,4,false,true,2026-05-14,43.078237,141.303075
+sap_224,Jieitai-Mae Quiet 2LDK Heights,Hokkaido,Sapporo,Minami,Jieitai-Mae,10,124000,3000,124000,0,2LDK,55.9,14,11,false,true,2026-07-29,42.996225,141.344402
+sap_225,Sapporo Flexible 1LDK Heights,Hokkaido,Sapporo,Kita,Sapporo,3,99000,5000,0,0,1LDK,36.6,14,7,true,true,2026-06-06,43.069522,141.356877
+sap_226,Susukino Bright 1R House,Hokkaido,Sapporo,Chuo,Susukino,9,48000,6000,24000,48000,1R,22.5,1,9,false,true,2026-06-18,43.054013,141.357629
+sap_227,Kita 24 Jo Comfort 1LDK Residence,Hokkaido,Sapporo,Kita,Kita 24 Jo,4,106000,3000,106000,53000,1LDK,41.9,6,1,false,false,2026-06-02,43.089558,141.345400
+sap_228,Higashi-Kuyakusho-Mae Sunny 1R Court,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,10,42000,3500,21000,21000,1R,21.1,19,1,false,true,2026-05-28,43.072328,141.358830
+sap_229,Nango 7-chome Smart 1LDK Garden,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,4,84000,4000,0,42000,1LDK,34.4,25,6,false,true,2026-07-07,43.045029,141.397305
+sap_230,Hiragishi Sunny 1DK Court,Hokkaido,Sapporo,Toyohira,Hiragishi,5,72000,5000,0,0,1DK,32.4,12,4,false,false,2026-05-27,43.038237,141.373236
+sap_231,Shin-Sapporo Cozy 1K Residence,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,10,44000,5000,0,0,1K,21.8,27,1,false,true,2026-08-26,43.042696,141.477664
+sap_232,Miyanosawa Smart 2LDK Place,Hokkaido,Sapporo,Nishi,Miyanosawa,10,123000,3500,0,0,2LDK,55.5,19,10,false,true,2026-06-01,43.085727,141.278342
+sap_233,Teine Quiet 1R Heights,Hokkaido,Sapporo,Teine,Teine,9,42000,2500,0,21000,1R,21.0,6,4,true,false,2026-05-27,43.119681,141.245637
+sap_234,Odori Comfort 1R House,Hokkaido,Sapporo,Chuo,Odori,7,45000,3500,0,0,1R,20.6,27,7,true,true,2026-07-28,43.058872,141.360588
+sap_235,Maruyama-Koen Urban 1DK Garden,Hokkaido,Sapporo,Chuo,Maruyama-Koen,6,74000,3500,0,0,1DK,31.1,3,6,true,true,2026-07-13,43.057530,141.311033
+sap_236,Asabu Practical 1K Plaza,Hokkaido,Sapporo,Kita,Asabu,8,55000,4000,0,55000,1K,25.8,7,1,false,false,2026-05-03,43.098901,141.345872
+sap_237,Shiroishi Cozy 1DK House,Hokkaido,Sapporo,Shiroishi,Shiroishi,6,66000,3500,66000,66000,1DK,27.8,8,2,false,false,2026-07-02,43.043259,141.411987
+sap_238,Gakuen-Mae Cozy 1DK Terrace,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,5,70000,2500,35000,70000,1DK,28.1,15,3,false,true,2026-08-09,43.053776,141.364300
+sap_239,Fukuzumi Flexible 1R Residence,Hokkaido,Sapporo,Toyohira,Fukuzumi,6,43000,6000,21500,43000,1R,22.9,27,2,false,true,2026-08-05,43.025704,141.406874
+sap_240,Kotoni Bright 1R Residence,Hokkaido,Sapporo,Nishi,Kotoni,10,42000,4000,0,21000,1R,20.0,1,10,false,true,2026-08-17,43.087498,141.304902
+sap_241,Jieitai-Mae Quiet 1K Terrace,Hokkaido,Sapporo,Minami,Jieitai-Mae,10,47000,4000,47000,0,1K,25.0,6,11,true,true,2026-06-01,42.988247,141.344416
+sap_242,Sapporo Bright 1LDK Court,Hokkaido,Sapporo,Kita,Sapporo,3,100000,4000,50000,0,1LDK,40.5,18,7,false,true,2026-07-20,43.068236,141.352804
+sap_243,Susukino Modern 1LDK Place,Hokkaido,Sapporo,Chuo,Susukino,3,103000,4000,0,51500,1LDK,41.0,3,3,false,true,2026-07-02,43.061648,141.348154
+sap_244,Kita 24 Jo Modern 2LDK Residence,Hokkaido,Sapporo,Kita,Kita 24 Jo,8,120000,4000,120000,0,2LDK,50.7,16,7,false,false,2026-05-16,43.085967,141.342173
+sap_245,Higashi-Kuyakusho-Mae Bright 1R Place,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,8,42000,5000,42000,42000,1R,19.1,21,11,false,false,2026-08-20,43.069282,141.363548
+sap_246,Nango 7-chome Cozy 1R Residence,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,6,43000,2500,21500,0,1R,18.6,8,3,false,false,2026-08-26,43.043127,141.396649
+sap_247,Hiragishi Flexible 1LDK Court,Hokkaido,Sapporo,Toyohira,Hiragishi,10,87000,2000,43500,43500,1LDK,37.5,19,11,true,true,2026-05-11,43.042487,141.367980
+sap_248,Shin-Sapporo Urban 1K House,Hokkaido,Sapporo,Atsubetsu,Shin-Sapporo,7,59000,2500,59000,29500,1K,23.6,1,11,false,true,2026-08-07,43.032446,141.478360
+sap_249,Miyanosawa Modern 1LDK Place,Hokkaido,Sapporo,Nishi,Miyanosawa,9,94000,6000,47000,0,1LDK,40.4,12,3,false,true,2026-05-25,43.090935,141.280537
+sap_250,Teine Sunny 2LDK Residence,Hokkaido,Sapporo,Teine,Teine,4,119000,6000,59500,59500,2LDK,48.6,25,7,false,true,2026-07-17,43.116913,141.239720
+sap_251,Odori Quiet 1R Square,Hokkaido,Sapporo,Chuo,Odori,9,51000,3500,25500,0,1R,23.4,21,3,false,false,2026-08-22,43.062860,141.351257
+sap_252,Maruyama-Koen Urban 1K Place,Hokkaido,Sapporo,Chuo,Maruyama-Koen,5,52000,6000,0,52000,1K,22.6,17,6,true,false,2026-07-06,43.052077,141.316852
+sap_253,Asabu Flexible 1R Court,Hokkaido,Sapporo,Kita,Asabu,6,42000,6000,21000,0,1R,19.3,26,12,false,false,2026-06-16,43.099483,141.342474
+sap_254,Shiroishi Quiet 1LDK Plaza,Hokkaido,Sapporo,Shiroishi,Shiroishi,6,102000,6000,102000,0,1LDK,41.9,11,4,false,true,2026-07-26,43.042500,141.417040
+sap_255,Gakuen-Mae Sunny 1K House,Hokkaido,Sapporo,Toyohira,Gakuen-Mae,5,59000,4000,59000,59000,1K,24.3,1,6,false,true,2026-05-26,43.052380,141.358763
+sap_256,Fukuzumi Smart 1R Place,Hokkaido,Sapporo,Toyohira,Fukuzumi,4,46000,2500,0,0,1R,19.8,2,7,false,false,2026-05-11,43.018467,141.408730
+sap_257,Kotoni Cozy 1LDK Residence,Hokkaido,Sapporo,Nishi,Kotoni,3,99000,3500,0,99000,1LDK,35.1,3,2,false,true,2026-07-18,43.082317,141.306435
+sap_258,Jieitai-Mae Bright 1K House,Hokkaido,Sapporo,Minami,Jieitai-Mae,7,52000,5000,0,0,1K,24.8,8,10,false,true,2026-06-20,42.995063,141.352910
+sap_259,Sapporo Cozy 1DK Square,Hokkaido,Sapporo,Kita,Sapporo,8,73000,3000,73000,36500,1DK,27.6,5,9,true,true,2026-08-15,43.069943,141.349747
+sap_260,Susukino Sunny 1LDK House,Hokkaido,Sapporo,Chuo,Susukino,10,87000,2000,87000,87000,1LDK,36.8,28,7,false,true,2026-05-14,43.060694,141.357993
+sap_261,Kita 24 Jo Smart 1R Terrace,Hokkaido,Sapporo,Kita,Kita 24 Jo,9,42000,2000,0,0,1R,19.2,20,3,false,true,2026-08-22,43.087314,141.337933
+sap_262,Higashi-Kuyakusho-Mae Sunny 1DK Residence,Hokkaido,Sapporo,Higashi,Higashi-Kuyakusho-Mae,4,69000,4000,69000,69000,1DK,31.5,20,12,false,true,2026-05-08,43.071106,141.368439
+sap_263,Nango 7-chome Practical 1DK Court,Hokkaido,Sapporo,Shiroishi,Nango 7-chome,4,67000,4000,33500,0,1DK,30.5,26,7,false,false,2026-06-04,43.034748,141.394302
+sap_264,Hiragishi Cozy 1K Residence,Hokkaido,Sapporo,Toyohira,Hiragishi,6,61000,3500,30500,30500,1K,26.6,3,2,true,false,2026-08-21,43.031503,141.375480

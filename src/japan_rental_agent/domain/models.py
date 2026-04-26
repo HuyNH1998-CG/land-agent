@@ -28,6 +28,7 @@ class Listing(BaseModel):
     pet_allowed: bool | None = None
     lat: float | None = None
     lng: float | None = None
+    floor_plan_asset: str | None = None
     score: float | None = None
     score_breakdown: ListingScoreBreakdown | None = None
 
@@ -46,6 +47,11 @@ class SearchFilters(BaseModel):
 
 class ComparisonItem(BaseModel):
     id: str
+    title: str | None = None
     pros: list[str] = Field(default_factory=list)
     cons: list[str] = Field(default_factory=list)
-
+    rent_yen: int | None = None
+    area_m2: float | None = None
+    walk_min: int | None = None
+    overall_safety_score: float | None = None
+    floor_plan_asset: str | None = None

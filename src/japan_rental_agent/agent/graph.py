@@ -37,6 +37,7 @@ def build_rental_agent_graph(dependencies: AgentDependencies):
         route_after_intent,
         {
             "clarification": "clarification",
+            "response": "response",
             "search": "listing_search",
         },
     )

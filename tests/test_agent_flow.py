@@ -89,6 +89,29 @@ class PassthroughRankingTool:
         return {"ranked": listings, "preferences_used": preferences}
 
 
+class PassthroughComparisonTool:
+    name = "compare"
+
+    def execute(self, listing_ids: list[str]) -> dict:
+        return {
+            "comparison": [
+                {"id": listing_id, "pros": ["good"], "cons": ["tradeoff"]}
+                for listing_id in listing_ids
+            ]
+        }
+
+
+class PassthroughExportTool:
+    name = "export"
+
+    def execute(self, listings: list[dict], output_format: str) -> dict:
+        return {
+            "file_url": f"/tmp/mock_export.{output_format}",
+            "file_type": output_format,
+            "count": len(listings),
+        }
+
+
 def build_service(agent_model: AgentModelProtocol, search_tool) -> RentalAgentService:
     config = AppConfig(llm_api_key=None, agent_max_retries=1)
     deps = AgentDependencies(
@@ -98,6 +121,8 @@ def build_service(agent_model: AgentModelProtocol, search_tool) -> RentalAgentSe
         search_tool=search_tool,
         enrichment_tool=PassthroughEnrichmentTool(),
         ranking_tool=PassthroughRankingTool(),
+        comparison_tool=PassthroughComparisonTool(),
+        export_tool=PassthroughExportTool(),
     )
     return RentalAgentService(config=config, dependencies=deps)
 
@@ -181,3 +206,73 @@ def test_retry_path_retries_search_once_then_succeeds() -> None:
     assert response.status == "success"
     assert response.reply == "Recovered after retry."
     assert flaky_search.calls == 2
+
+
+def test_compare_path_uses_comparison_tool_without_search() -> None:
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                intent="compare",
+                normalized_query="Compare two listings",
+                constraints={},
+                missing_fields=[],
+                confidence=0.82,
+            ),
+            response=ResponseDraft(reply="Here is the comparison summary.", confidence=0.81),
+        ),
+        search_tool=StaticSearchTool([]),
+    )
+
+    response = service.handle_request(
+        AgentRequest(
+            session_id="compare",
+            message="Compare sap_001 and sap_002",
+            context={"selected_listings": ["sap_001", "sap_002"]},
+        )
+    )
+
+    assert response.status == "success"
+    assert "bảng so sánh" in response.reply
+    assert len(response.data.comparison) == 2
+    assert "compare" in response.meta.tool_used
+
+
+def test_export_path_uses_export_tool_when_output_format_is_not_chat() -> None:
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                normalized_query="Export search results",
+                constraints={"city": "Tokyo"},
+                missing_fields=[],
+                output_format="json",
+                confidence=0.77,
+            ),
+            response=ResponseDraft(reply="I exported the top results.", confidence=0.79),
+        ),
+        search_tool=StaticSearchTool(
+            [
+                {
+                    "listing_id": "apt_001",
+                    "title": "1K near Shinjuku",
+                    "city": "Tokyo",
+                    "ward": "Shinjuku",
+                    "rent_yen": 75000,
+                    "station": "Shinjuku",
+                    "walk_min": 5,
+                }
+            ]
+        ),
+    )
+
+    response = service.handle_request(
+        AgentRequest(
+            session_id="export",
+            message="Export the results",
+            options={"top_k": 3, "output_format": "json"},
+        )
+    )
+
+    assert response.status == "success"
+    assert response.reply == "I exported the top results."
+    assert response.data.file == "/tmp/mock_export.json"
+    assert "export" in response.meta.tool_used

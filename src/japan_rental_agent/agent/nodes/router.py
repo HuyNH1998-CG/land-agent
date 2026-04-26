@@ -5,9 +5,11 @@ from typing import Literal
 from japan_rental_agent.agent.state import RentalAgentState
 
 
-def route_after_intent(state: RentalAgentState) -> Literal["clarification", "search"]:
+def route_after_intent(state: RentalAgentState) -> Literal["clarification", "search", "response"]:
     if state.get("missing_fields"):
         return "clarification"
+    if state.get("intent_label") == "compare":
+        return "response"
     return "search"
 
 

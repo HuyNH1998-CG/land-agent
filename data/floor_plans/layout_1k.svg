@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640">
+  <rect width="960" height="640" fill="#f4f2ea"/>
+  <rect x="70" y="70" width="820" height="500" fill="#fffdf8" stroke="#20313b" stroke-width="8"/>
+  <rect x="70" y="70" width="210" height="220" fill="#d7e6ef" stroke="#20313b" stroke-width="6"/>
+  <rect x="70" y="290" width="210" height="280" fill="#ece0cd" stroke="#20313b" stroke-width="6"/>
+  <rect x="280" y="70" width="610" height="500" fill="#f8f2d5" stroke="#20313b" stroke-width="6"/>
+  <text x="175" y="190" font-size="34" text-anchor="middle" fill="#20313b">Kitchen</text>
+  <text x="175" y="445" font-size="32" text-anchor="middle" fill="#20313b">Bath / WC</text>
+  <text x="585" y="340" font-size="58" text-anchor="middle" fill="#20313b">Main Room</text>
+  <rect x="730" y="570" width="160" height="35" fill="#c6d7eb" stroke="#20313b" stroke-width="5"/>
+  <text x="810" y="595" font-size="22" text-anchor="middle" fill="#20313b">Balcony</text>
+  <text x="80" y="620" font-size="24" fill="#20313b">Mock floor plan: 1K</text>
+</svg>

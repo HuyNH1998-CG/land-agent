@@ -9,6 +9,7 @@ description = "Base project structure for a Japan rental chat agent."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "chromadb>=1.1.0",
     "langgraph>=0.3.0",
     "openai>=1.79.0",
     "pydantic>=2.7.0",

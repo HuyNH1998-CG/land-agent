@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import csv
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 
 @dataclass(slots=True)
@@ -39,3 +41,6 @@ class LocalDatasetRepository:
             "station_context": self.registry.station_context_path,
         }
 
+    def read_csv_rows(self, path: Path) -> list[dict[str, Any]]:
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            return list(csv.DictReader(handle))

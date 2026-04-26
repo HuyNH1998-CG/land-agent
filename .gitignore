@@ -11,4 +11,5 @@ __pycache__/
 *.sqlite3
 data/exports/*
 !data/exports/.gitkeep
-
+data/chroma/*
+!data/chroma/.gitkeep
