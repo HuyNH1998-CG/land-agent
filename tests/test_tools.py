@@ -4,6 +4,8 @@ import shutil
 from pathlib import Path
 from uuid import uuid4
 
+import pytest
+
 from japan_rental_agent.config import AppConfig
 from japan_rental_agent.data import seed_all_datasets
 from japan_rental_agent.tools import (
@@ -23,6 +25,7 @@ def build_test_config() -> AppConfig:
     shutil.copytree(source_dir, data_dir)
     config = AppConfig(
         llm_api_key=None,
+        search_provider="local",
         data_dir=data_dir,
         export_dir=data_dir / "exports",
         chroma_dir=data_dir / "chroma-test",
@@ -46,6 +49,64 @@ def test_parser_extracts_core_constraints() -> None:
     assert parsed["constraints"]["preferred_layout"] == "1LDK"
     assert parsed["constraints"]["occupancy"] == 2
     assert parsed["constraints"]["near_station"] is True
+
+
+@pytest.mark.parametrize(
+    ("message", "expected_max_rent"),
+    [
+        ("tìm căn hộ tại sapporo khoảng 5man", 50000),
+        ("tìm căn hộ tại sapporo khoảng 5万円", 50000),
+    ],
+)
+def test_parser_extracts_man_budget_formats(message: str, expected_max_rent: int) -> None:
+    parsed = QueryParserTool().execute(message)
+
+    assert parsed["constraints"]["city"] == "Sapporo"
+    assert parsed["constraints"]["max_rent"] == expected_max_rent
+
+
+@pytest.mark.parametrize(
+    ("message", "expected_listing_ids", "expected_criteria", "expected_language"),
+    [
+        (
+            "Compare Miyanosawa Smart 1R Residence and Kita 24 Jo Quiet 1R House",
+            ["sap_045", "sap_091"],
+            [],
+            "en",
+        ),
+        (
+            "so sánh Miyanosawa Smart 1R Residence và Kita 24 Jo Quiet 1R House",
+            ["sap_045", "sap_091"],
+            [],
+            "vi",
+        ),
+        (
+            "Compare by price, area, then location",
+            [],
+            ["price", "size", "location"],
+            "en",
+        ),
+        (
+            "so sánh theo giá thuê, diện tích rồi vị trí",
+            [],
+            ["price", "size", "location"],
+            "vi",
+        ),
+    ],
+)
+def test_parser_extracts_compare_targets_criteria_and_language(
+    message: str,
+    expected_listing_ids: list[str],
+    expected_criteria: list[str],
+    expected_language: str,
+) -> None:
+    tool = QueryParserTool()
+    parsed = tool.execute(message)
+
+    assert parsed["intent_hint"] == "compare"
+    assert parsed["selected_listing_ids"] == expected_listing_ids
+    assert parsed["compare_criteria"] == expected_criteria
+    assert parsed["response_language"] == expected_language
 
 
 def test_search_enrichment_ranking_compare_and_export_flow() -> None:
@@ -91,6 +152,25 @@ def test_search_enrichment_ranking_compare_and_export_flow() -> None:
         assert len(comparison) == 2
         assert comparison[0]["pros"]
         assert comparison[0]["cons"]
+
+        comparison_by_title = comparison_tool.execute(
+            ["Miyanosawa Smart 1R Residence", "Kita 24 Jo Quiet 1R House"]
+        )["comparison"]
+        assert len(comparison_by_title) == 2
+
+        ordered_comparison_en = comparison_tool.execute(
+            ["sap_045", "sap_091"],
+            compare_criteria=["location", "price", "size"],
+            language="en",
+        )["comparison"]
+        assert ordered_comparison_en[0]["pros"][0].startswith("location:")
+
+        ordered_comparison_vi = comparison_tool.execute(
+            ["sap_045", "sap_091"],
+            compare_criteria=["price", "size", "location"],
+            language="vi",
+        )["comparison"]
+        assert ordered_comparison_vi[0]["pros"][0].startswith("giá thuê:")
 
         export_json = export_tool.execute(ranked[:3], "json")
         export_csv = export_tool.execute(ranked[:3], "csv")

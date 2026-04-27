@@ -35,8 +35,24 @@ class RankingTool:
         safety_weight = float(preferences.get("weight_safety", 0.1))
         weight_total = price_weight + location_weight + size_weight + safety_weight or 1.0
 
-        rents = [float(parse_int(item.get("rent_yen") or item.get("rent")) or 0) for item in listings]
-        walks = [float(parse_int(item.get("walk_min") or item.get("distance_to_station_min")) or 0) for item in listings]
+        known_rents = [float(value) for item in listings if (value := parse_int(item.get("rent_yen") or item.get("rent"))) is not None]
+        known_walks = [
+            float(value)
+            for item in listings
+            if (value := parse_int(item.get("walk_min") or item.get("distance_to_station_min"))) is not None
+        ]
+        missing_rent_penalty = (max(known_rents) + 10000.0) if known_rents else 999999.0
+        missing_walk_penalty = (max(known_walks) + 15.0) if known_walks else 99.0
+        rents = [
+            float(value) if (value := parse_int(item.get("rent_yen") or item.get("rent"))) is not None else missing_rent_penalty
+            for item in listings
+        ]
+        walks = [
+            float(value)
+            if (value := parse_int(item.get("walk_min") or item.get("distance_to_station_min"))) is not None
+            else missing_walk_penalty
+            for item in listings
+        ]
         commute_times = [float(parse_int(item.get("commute_time_min")) or 0) for item in listings]
         areas = [float(parse_float(item.get("area_m2")) or 0) for item in listings]
         safety_scores = [float(parse_float(item.get("overall_safety_score")) or 0) for item in listings]
@@ -44,8 +60,10 @@ class RankingTool:
 
         ranked_listings: list[dict[str, Any]] = []
         for listing in listings:
-            rent = float(parse_int(listing.get("rent_yen") or listing.get("rent")) or 0)
-            walk = float(parse_int(listing.get("walk_min") or listing.get("distance_to_station_min")) or 0)
+            rent_value = parse_int(listing.get("rent_yen") or listing.get("rent"))
+            walk_value = parse_int(listing.get("walk_min") or listing.get("distance_to_station_min"))
+            rent = float(rent_value) if rent_value is not None else missing_rent_penalty
+            walk = float(walk_value) if walk_value is not None else missing_walk_penalty
             commute = float(parse_int(listing.get("commute_time_min")) or 0)
             area = float(parse_float(listing.get("area_m2")) or 0)
             safety = float(parse_float(listing.get("overall_safety_score")) or 0)

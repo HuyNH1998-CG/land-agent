@@ -16,6 +16,17 @@ class AppConfig(BaseSettings):
     llm_reasoning_effort: str | None = "low"
     default_top_k: int = 5
     agent_max_retries: int = 1
+    app_dev_mode: bool = Field(default=False, alias="APP_DEV_MODE")
+    search_provider: str = Field(default="web", alias="SEARCH_PROVIDER")
+    web_search_region: str = Field(default="jp-jp", alias="WEB_SEARCH_REGION")
+    web_search_max_results: int = Field(default=20, alias="WEB_SEARCH_MAX_RESULTS")
+    public_context_enabled: bool = Field(default=True, alias="PUBLIC_CONTEXT_ENABLED")
+    estat_app_id: str | None = Field(default=None, alias="ESTAT_APP_ID")
+    mlit_api_key: str | None = Field(default=None, alias="MLIT_API_KEY")
+    mlit_api_base_url: str = Field(
+        default="https://www.reinfolib.mlit.go.jp/ex-api/external",
+        alias="MLIT_API_BASE_URL",
+    )
     data_dir: Path = Path("data")
     export_dir: Path = Path("data/exports")
     chroma_dir: Path = Path("data/chroma")

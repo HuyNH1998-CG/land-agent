@@ -8,12 +8,11 @@ This repository currently provides:
 
 - project layout for `ui`, `agent`, `tools`, and `data`
 - shared request/response contracts
-- LangGraph workflow skeleton
-- local Chroma vector store integration and seeding utilities
+- LangGraph workflow for search, enrichment, ranking, comparison, export, and clarification
+- public-search listing integration through DDGS
+- public context integration boundaries for e-Stat and MLIT datasets
+- optional local Chroma vector store integration and seeding utilities for offline development
 - Streamlit demo entrypoint
-- placeholder tool implementations that follow the expected interfaces
-
-Business logic is intentionally not implemented yet.
 
 ## Project layout
 
@@ -40,6 +39,12 @@ Expected keys:
 - `LLM_CHAT_MODEL`
 - `LLM_BASE_URL`
 - `LLM_EMBEDDING_MODEL`
+- `SEARCH_PROVIDER` defaults to `web`; set `local` for CSV/Chroma demo data
+- `WEB_SEARCH_REGION` defaults to `jp-jp`
+- `WEB_SEARCH_MAX_RESULTS` defaults to `20`
+- `ESTAT_APP_ID` enables keyed e-Stat API calls
+- `MLIT_API_KEY` enables keyed MLIT Real Estate Information Library calls
+- `PUBLIC_CONTEXT_ENABLED` defaults to `true`
 
 ## Local setup
 
@@ -55,7 +60,7 @@ pip install -e .[dev]
 streamlit run ui/app.py
 ```
 
-## Generate local mock data
+## Generate local demo data
 
 ```bash
 python scripts/generate_sapporo_mock_data.py
@@ -75,9 +80,6 @@ python scripts/seed_chroma.py
 
 Seeded collections are stored under `data/chroma/`.
 
-## Next implementation steps
+## Public Data Docs
 
-1. Implement real query parsing and clarification rules.
-2. Connect local CSV or SQLite datasets.
-3. Implement search, enrichment, ranking, compare, and export logic.
-4. Wire the chosen Gemini-compatible model client into the agent flow.
+See `docs/public-data-integration.md` for the current provider strategy and API key notes.

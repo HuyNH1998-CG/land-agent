@@ -4,7 +4,16 @@ import re
 from typing import Any
 
 from japan_rental_agent.config import AppConfig
-from japan_rental_agent.tools.support import load_known_locations, normalize_text
+from japan_rental_agent.tools.support import (
+    detect_language,
+    extract_compare_criteria,
+    load_known_locations,
+    normalize_phrase,
+    normalize_text,
+    resolve_listing_identifiers,
+    tokenize_text,
+)
+
 
 class QueryParserTool:
     """Heuristic parser for rental-search constraints."""
@@ -17,14 +26,26 @@ class QueryParserTool:
     def execute(self, message: str) -> dict[str, Any]:
         text = message.strip()
         lowered = text.lower()
+        normalized_text = normalize_text(text)
         intent_hint = "search"
         selected_listing_ids = sorted(set(match.lower() for match in re.findall(r"\bsap_\d{3}\b", lowered)))
         output_format: str | None = None
+        compare_targets: list[str] = []
+        compare_criteria = extract_compare_criteria(text)
+        response_language = detect_language(text)
 
-        if "compare" in lowered:
+        if "compare" in lowered or "sosanh" in normalized_text:
             intent_hint = "compare"
         elif "export" in lowered or "download" in lowered:
             intent_hint = "export"
+
+        if intent_hint == "compare" and not selected_listing_ids:
+            compare_targets = self._extract_compare_segments(text)
+            resolvable_targets = [target for target in compare_targets if self._looks_like_listing_reference(target)]
+            if resolvable_targets:
+                selected_listing_ids = resolve_listing_identifiers(self.config, resolvable_targets, limit=4)
+        elif intent_hint == "compare":
+            compare_targets = self._extract_compare_segments(text)
 
         if " csv" in f" {lowered}" or lowered.endswith("csv"):
             output_format = "csv"
@@ -68,9 +89,7 @@ class QueryParserTool:
         if "hokkaido" in lowered:
             constraints["prefecture"] = "Hokkaido"
 
-        if "near station" in lowered or "station" in lowered and any(
-            token in lowered for token in ["near", "close", "walk", "ga", "eki"]
-        ):
+        if "near station" in lowered or ("station" in lowered and any(token in lowered for token in ["near", "close", "walk", "ga", "eki"])):
             constraints["near_station"] = True
 
         if "pet" in lowered or "dog" in lowered or "cat" in lowered:
@@ -90,11 +109,14 @@ class QueryParserTool:
                 constraints["max_rent"] = int(match.group(1))
                 break
 
-        man_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:man|万円)", lowered)
+        man_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:man)", lowered)
         if man_match:
             constraints["max_rent"] = int(float(man_match.group(1)) * 10000)
+        japanese_man_match = re.search(r"(\d+(?:\.\d+)?)\s*万(?:円)?", text)
+        if japanese_man_match:
+            constraints["max_rent"] = int(float(japanese_man_match.group(1)) * 10000)
 
-        area_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:m2|sqm|square meters|㎡)", lowered)
+        area_match = re.search(r"(\d+(?:\.\d+)?)\s*(?:m2|sqm|square meters)", lowered)
         if area_match:
             constraints["min_area"] = float(area_match.group(1))
 
@@ -115,7 +137,7 @@ class QueryParserTool:
                 constraints["notes"].append(note)
 
         missing_fields: list[str] = []
-        if not any(key in constraints for key in ["city", "ward", "nearest_station"]):
+        if not any(key in constraints for key in ["city", "ward", "nearest_station"]) and intent_hint == "search":
             missing_fields.append("city")
 
         return {
@@ -124,5 +146,58 @@ class QueryParserTool:
             "missing_fields": missing_fields,
             "intent_hint": intent_hint,
             "selected_listing_ids": selected_listing_ids,
+            "compare_targets": compare_targets,
+            "compare_criteria": compare_criteria,
+            "response_language": response_language,
             "output_format": output_format,
         }
+
+    def _extract_compare_segments(self, text: str) -> list[str]:
+        normalized_phrase = normalize_phrase(text)
+        cleaned = re.sub(
+            r"^\s*(compare|so sanh)\s+",
+            "",
+            normalized_phrase,
+            flags=re.IGNORECASE,
+        )
+        segments = [
+            segment.strip(" ,.;:!?\"'")
+            for segment in re.split(r"\b(?:and|vs|versus|with|va|voi)\b", cleaned, flags=re.IGNORECASE)
+        ]
+        return [segment for segment in segments if segment]
+
+    def _looks_like_listing_reference(self, segment: str) -> bool:
+        generic_tokens = {
+            "the",
+            "listing",
+            "listings",
+            "same",
+            "area",
+            "above",
+            "from",
+            "by",
+            "price",
+            "rent",
+            "location",
+            "size",
+            "criteria",
+            "theo",
+            "gia",
+            "thue",
+            "dien",
+            "tich",
+            "vi",
+            "tri",
+            "cung",
+            "khu",
+            "vuc",
+            "vua",
+            "list",
+            "ra",
+            "cac",
+            "can",
+            "trong",
+        }
+        tokens = tokenize_text(segment)
+        specific_tokens = [token for token in tokens if token not in generic_tokens]
+        return len(specific_tokens) >= 2

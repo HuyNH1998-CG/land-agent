@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from japan_rental_agent.config import AppConfig
+from japan_rental_agent.data.public_sources import PublicContextProvider
 from japan_rental_agent.tools.support import (
     load_city_context_map,
     load_floor_plan_map,
@@ -19,10 +20,14 @@ class AreaEnrichmentTool:
 
     name = "enrichment"
 
-    def __init__(self, config: AppConfig | None = None) -> None:
+    def __init__(self, config: AppConfig | None = None, public_context_provider: PublicContextProvider | None = None) -> None:
         self.config = config or AppConfig()
+        self.public_context_provider = public_context_provider or PublicContextProvider(self.config)
 
     def execute(self, listings: list[dict[str, Any]], context: dict[str, Any]) -> dict[str, Any]:
+        if self.config.search_provider.lower() not in {"local", "mock", "csv"}:
+            return self._execute_public_context(listings, context)
+
         hazard_map = load_hazard_map(self.config)
         station_map = load_station_map(self.config)
         city_context_map = load_city_context_map(self.config)
@@ -71,4 +76,30 @@ class AreaEnrichmentTool:
         return {
             "enriched": enriched,
             "context_used": context,
+        }
+
+    def _execute_public_context(self, listings: list[dict[str, Any]], context: dict[str, Any]) -> dict[str, Any]:
+        enriched: list[dict[str, Any]] = []
+        area_context = self.public_context_provider.get_context(context)
+        for listing in listings:
+            enriched_listing = dict(listing)
+            enriched_listing.update(
+                {
+                    "public_context": area_context,
+                    "context_sources": sorted(area_context.get("datasets", {}).keys()),
+                    "overall_safety_score": listing.get("overall_safety_score"),
+                    "source_url": listing.get("source_url"),
+                    "source_name": listing.get("source_name"),
+                    "extraction_confidence": listing.get("extraction_confidence"),
+                }
+            )
+            enriched.append(enriched_listing)
+
+        return {
+            "enriched": enriched,
+            "context_used": {
+                **context,
+                "context_provider": "public",
+                "datasets": ["housing_land_survey", "mlit_real_estate", "hazard_safety", "regional_indicators"],
+            },
         }

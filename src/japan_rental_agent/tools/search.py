@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 from japan_rental_agent.config import AppConfig
+from japan_rental_agent.data.public_sources import RealEstateWebSearchProvider
 from japan_rental_agent.data.seed import LISTING_COLLECTION
 from japan_rental_agent.tools.support import (
     build_listing_document,
@@ -18,12 +19,13 @@ from japan_rental_agent.tools.support import (
 
 
 class ListingSearchTool:
-    """Searches local mock listings with structured filters and Chroma reranking."""
+    """Searches real listing sources by default, with local CSV kept for tests/dev."""
 
     name = "search"
 
-    def __init__(self, config: AppConfig | None = None) -> None:
+    def __init__(self, config: AppConfig | None = None, web_provider: RealEstateWebSearchProvider | None = None) -> None:
         self.config = config or AppConfig()
+        self.web_provider = web_provider or RealEstateWebSearchProvider(self.config)
 
     def _apply_structured_filters(
         self,
@@ -148,6 +150,9 @@ class ListingSearchTool:
         }
 
     def execute(self, filters: dict[str, Any]) -> dict[str, Any]:
+        if self.config.search_provider.lower() not in {"local", "mock", "csv"}:
+            return self.web_provider.search_listings(filters)
+
         listings = load_listings(self.config)
         floor_plan_map = load_floor_plan_map(self.config)
         filtered_rows = [row for row in listings if self._apply_structured_filters(row, filters)]

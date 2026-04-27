@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import sys
 import uuid
 from pathlib import Path
@@ -30,6 +31,7 @@ def initialize_session() -> None:
     st.session_state.setdefault("messages", [])
     st.session_state.setdefault("selected_listings", [])
     st.session_state.setdefault("previous_filters", {})
+    st.session_state.setdefault("recent_listings", [])
 
 
 def resolve_workspace_path(value: str | None) -> Path | None:
@@ -48,6 +50,15 @@ def read_svg_text(path: Path) -> str | None:
         return None
 
 
+def resize_svg_markup(svg_text: str, *, max_width_px: int) -> str:
+    responsive_svg = re.sub(r"<svg\b", "<svg style=\"width:100%;height:auto;display:block;\"", svg_text, count=1)
+    return (
+        f"<div style=\"max-width:{max_width_px}px;width:100%;overflow:hidden;margin:0 auto;\">"
+        f"{responsive_svg}"
+        "</div>"
+    )
+
+
 def listing_label(listing: dict[str, Any]) -> str:
     rent = listing.get("rent") or listing.get("rent_yen") or "n/a"
     layout = listing.get("layout") or "layout?"
@@ -63,7 +74,29 @@ def collect_known_listings() -> dict[str, dict[str, Any]]:
     return known
 
 
-def render_floor_plan(listing: dict[str, Any]) -> None:
+def build_recent_listings(limit: int = 8) -> list[dict[str, Any]]:
+    recent: list[dict[str, Any]] = []
+    for message in reversed(st.session_state["messages"]):
+        listings = message.get("listings", [])
+        if listings:
+            recent.extend(listings)
+            break
+    return recent[:limit]
+
+
+def build_conversation_history(limit: int = 8) -> list[dict[str, str]]:
+    history: list[dict[str, str]] = []
+    for message in st.session_state["messages"][-limit:]:
+        history.append(
+            {
+                "role": message["role"],
+                "content": message["content"],
+            }
+        )
+    return history
+
+
+def render_floor_plan(listing: dict[str, Any], *, max_width_px: int = 320) -> None:
     floor_plan_asset = resolve_workspace_path(listing.get("floor_plan_asset"))
     if not floor_plan_asset or not floor_plan_asset.exists():
         st.caption("No floor plan available")
@@ -72,10 +105,10 @@ def render_floor_plan(listing: dict[str, Any]) -> None:
     if floor_plan_asset.suffix.lower() == ".svg":
         svg_text = read_svg_text(floor_plan_asset)
         if svg_text:
-            st.markdown(svg_text, unsafe_allow_html=True)
+            st.markdown(resize_svg_markup(svg_text, max_width_px=max_width_px), unsafe_allow_html=True)
             return
 
-    st.image(str(floor_plan_asset), use_container_width=True)
+    st.image(str(floor_plan_asset), width=max_width_px)
 
 
 def toggle_listing(selected: bool, listing_id: str) -> None:
@@ -122,13 +155,19 @@ def render_listing_card(listing: dict[str, Any], message_index: int) -> None:
         if traits:
             st.caption(" | ".join(traits))
 
+        if listing.get("source_url"):
+            source_name = listing.get("source_name") or "source"
+            st.link_button(f"Open {source_name}", listing["source_url"])
+        if listing.get("source_snippet"):
+            st.caption(str(listing["source_snippet"])[:280])
+
         score_breakdown = listing.get("score_breakdown")
         if isinstance(score_breakdown, dict) and score_breakdown:
             st.json(score_breakdown, expanded=False)
 
     with plan_col:
         st.caption("Floor plan")
-        render_floor_plan(listing)
+        render_floor_plan(listing, max_width_px=300)
 
 
 def render_listings(listings: list[dict[str, Any]], message_index: int) -> None:
@@ -151,17 +190,18 @@ def render_comparison(comparison: list[dict[str, Any]]) -> None:
         title = item.get("title") or listing.get("title", "")
         floor_plan_asset = item.get("floor_plan_asset") or listing.get("floor_plan_asset")
         with column:
-            st.markdown(f"**{item['id']}**")
-            if title:
-                st.caption(title)
-            if floor_plan_asset:
-                render_floor_plan({"floor_plan_asset": floor_plan_asset})
-            st.write("Pros")
-            for pro in item.get("pros", []):
-                st.write(f"- {pro}")
-            st.write("Cons")
-            for con in item.get("cons", []):
-                st.write(f"- {con}")
+            with st.container(border=True):
+                st.markdown(f"**{item['id']}**")
+                if title:
+                    st.caption(title)
+                if floor_plan_asset:
+                    render_floor_plan({"floor_plan_asset": floor_plan_asset}, max_width_px=220)
+                st.write("Pros")
+                for pro in item.get("pros", []):
+                    st.write(f"- {pro}")
+                st.write("Cons")
+                for con in item.get("cons", []):
+                    st.write(f"- {con}")
 
 
 def render_export_file(file_path: str | None, message_index: int) -> None:
@@ -180,21 +220,21 @@ def render_export_file(file_path: str | None, message_index: int) -> None:
         )
 
 
-def render_message(message: dict[str, Any], message_index: int) -> None:
+def render_message(message: dict[str, Any], message_index: int, *, show_meta: bool) -> None:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
         render_listings(message.get("listings", []), message_index)
         render_comparison(message.get("comparison", []))
         render_export_file(message.get("file"), message_index)
         meta = message.get("meta")
-        if meta:
+        if show_meta and meta:
             with st.expander("Meta", expanded=False):
                 st.json(meta, expanded=False)
 
 
-def render_messages() -> None:
+def render_messages(*, show_meta: bool) -> None:
     for message_index, message in enumerate(st.session_state["messages"]):
-        render_message(message, message_index)
+        render_message(message, message_index, show_meta=show_meta)
 
 
 def build_compare_prompt() -> str:
@@ -268,12 +308,18 @@ def submit_user_message(user_input: str, top_k: int, output_format: str) -> None
         context=RequestContext(
             previous_filters=st.session_state["previous_filters"],
             selected_listings=st.session_state["selected_listings"],
+            conversation_history=build_conversation_history(),
+            recent_listings=st.session_state["recent_listings"],
         ),
         options=RequestOptions(top_k=top_k, output_format=output_format),
     )
 
     response = agent_service.handle_request(request)
     st.session_state["previous_filters"] = response.data.filters_used
+    if response.data.listings:
+        st.session_state["recent_listings"] = [listing.model_dump() for listing in response.data.listings]
+    if response.data.comparison:
+        st.session_state["selected_listings"] = sorted({item.id for item in response.data.comparison})
 
     append_message(
         role="assistant",
@@ -293,11 +339,11 @@ def main() -> None:
     st.caption("Chat-driven rental search UI with listing cards, comparison, export, and floor-plan preview.")
 
     top_k, output_format = render_sidebar(config)
-    render_messages()
+    render_messages(show_meta=config.app_dev_mode)
 
     pending_chat_input = st.session_state.pop("pending_chat_input", None)
     user_input = pending_chat_input or st.chat_input(
-        "Describe the rental home you want, ask to compare selected listings, or export the results..."
+        "Describe the rental home you want, compare by listing IDs or house names, or export the results..."
     )
     if not user_input:
         return

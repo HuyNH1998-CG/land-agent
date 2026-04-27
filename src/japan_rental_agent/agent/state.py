@@ -28,6 +28,10 @@ class RentalAgentState(TypedDict, total=False):
     conversation_history: list[dict[str, str]]
     response_payload: dict[str, Any]
     selected_listings: list[str]
+    compare_targets: list[str]
+    compare_criteria: list[str]
+    response_language: str
+    recent_listings: list[dict[str, Any]]
     filters_used: dict[str, Any]
     tool_trace: list[str]
     exported_file: str | None
@@ -55,9 +59,13 @@ def create_initial_state(request: AgentRequest) -> RentalAgentState:
         error_code=None,
         last_failed_node=None,
         retry_target=None,
-        conversation_history=[],
+        conversation_history=request.context.conversation_history,
         response_payload={},
         selected_listings=request.context.selected_listings,
+        compare_targets=[],
+        compare_criteria=[],
+        response_language="vi",
+        recent_listings=request.context.recent_listings,
         filters_used=request.context.previous_filters,
         tool_trace=[],
         exported_file=None,

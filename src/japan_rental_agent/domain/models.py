@@ -29,6 +29,14 @@ class Listing(BaseModel):
     lat: float | None = None
     lng: float | None = None
     floor_plan_asset: str | None = None
+    source_url: str | None = None
+    source_name: str | None = None
+    source_snippet: str | None = None
+    source_kind: str | None = None
+    metadata_fields_found: list[str] = Field(default_factory=list)
+    metadata_error: str | None = None
+    extraction_confidence: float | None = None
+    context_sources: list[str] = Field(default_factory=list)
     score: float | None = None
     score_breakdown: ListingScoreBreakdown | None = None
 

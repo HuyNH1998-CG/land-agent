@@ -5,7 +5,7 @@ from japan_rental_agent.contracts import AgentRequest
 
 
 def test_service_bootstraps() -> None:
-    config = AppConfig(llm_api_key=None)
+    config = AppConfig(llm_api_key=None, search_provider="local")
     default_dependencies = AgentDependencies.from_config(config)
     service = RentalAgentService(
         config=config,

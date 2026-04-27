@@ -14,6 +14,8 @@ ResponseStatus = Literal["success", "need_clarification", "error"]
 class RequestContext(BaseModel):
     previous_filters: dict[str, Any] = Field(default_factory=dict)
     selected_listings: list[str] = Field(default_factory=list)
+    conversation_history: list[dict[str, str]] = Field(default_factory=list)
+    recent_listings: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class RequestOptions(BaseModel):
@@ -54,4 +56,3 @@ class AgentResponse(BaseModel):
     data: AgentData = Field(default_factory=AgentData)
     meta: AgentMeta = Field(default_factory=AgentMeta)
     error: AgentError | None = None
-

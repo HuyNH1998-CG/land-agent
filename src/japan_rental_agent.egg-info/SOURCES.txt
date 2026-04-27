@@ -28,6 +28,7 @@ src/japan_rental_agent/agent/nodes/search.py
 src/japan_rental_agent/contracts/__init__.py
 src/japan_rental_agent/contracts/api.py
 src/japan_rental_agent/data/__init__.py
+src/japan_rental_agent/data/public_sources.py
 src/japan_rental_agent/data/repositories.py
 src/japan_rental_agent/data/seed.py
 src/japan_rental_agent/data/vector_store.py
@@ -43,5 +44,6 @@ src/japan_rental_agent/tools/search.py
 src/japan_rental_agent/tools/support.py
 tests/test_agent_flow.py
 tests/test_data_seed.py
+tests/test_public_sources.py
 tests/test_smoke_imports.py
 tests/test_tools.py

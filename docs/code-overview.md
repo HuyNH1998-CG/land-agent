@@ -1,213 +1,127 @@
 # Code Overview
 
-Tài liệu này giải thích ngắn gọn phần code hiện có trong project skeleton.
+Tài liệu này mô tả ngắn gọn các phần code hiện có của Japan Rental Agent.
 
-## Mục tiêu hiện tại
+## Trạng Thái Hiện Tại
 
-Project mới chỉ ở mức **base structure**:
+Project đã có luồng agent chạy được từ UI tới LangGraph và tool layer:
 
-- đã có chia lớp `UI -> Agent -> Tools -> Data`
-- đã có request/response contract chung
-- đã có LangGraph workflow skeleton
-- chưa có logic tìm nhà thật, chưa đọc dataset thật, chưa gọi model thật
+- UI chat bằng Streamlit.
+- Contract chung giữa UI và agent.
+- LangGraph workflow cho search, clarification, enrichment, ranking, compare, export và error handling.
+- OpenAI-compatible LLM client.
+- Public search provider qua LangChain DDGS cho listing thật.
+- Public context provider cho nhóm dữ liệu e-Stat, MLIT, hazard/safety và regional indicators.
+- Local CSV/Chroma mode cho test và offline development.
 
-## Cấu trúc chính
+## `ui/app.py`
 
-### `ui/app.py`
+Entrypoint của Streamlit UI.
 
-Đây là entrypoint cho giao diện Streamlit.
+Nhiệm vụ chính:
 
-Nó hiện đang làm các việc sau:
-
-- tạo giao diện chat đơn giản
-- đọc một số cấu hình từ `.env`
-- nhận input người dùng
-- tạo `AgentRequest`
-- gọi `RentalAgentService`
-- hiển thị `reply` và danh sách `listings` nếu có
-
-Hiện tại UI đã chạy được ở mức demo skeleton, nhưng kết quả trả về vẫn là placeholder.
+- hiển thị chat interface
+- gửi `AgentRequest` vào `RentalAgentService`
+- lưu `recent_listings` để các lượt chat sau có thể so sánh kết quả vừa tìm
+- hiển thị listing card, link nguồn, sơ đồ nhà, comparison và file export
+- chỉ hiển thị metadata khi bật dev mode
 
 ## `src/japan_rental_agent/config.py`
 
-File này quản lý cấu hình ứng dụng bằng `pydantic-settings`.
+Quản lý cấu hình runtime bằng `pydantic-settings`.
 
-Nó map các biến môi trường như:
+Các nhóm cấu hình chính:
 
-- `LLM_API_KEY`
-- `LLM_CHAT_MODEL`
-- `LLM_BASE_URL`
-- `LLM_EMBEDDING_MODEL`
-
-Ngoài ra còn giữ các giá trị mặc định như `default_top_k`, `data_dir`, `export_dir`.
+- LLM: `LLM_API_KEY`, `LLM_CHAT_MODEL`, `LLM_BASE_URL`, `LLM_EMBEDDING_MODEL`
+- Search: `SEARCH_PROVIDER`, `WEB_SEARCH_REGION`, `WEB_SEARCH_MAX_RESULTS`
+- Public data: `ESTAT_APP_ID`, `MLIT_API_KEY`, `PUBLIC_CONTEXT_ENABLED`
+- Local data: `data_dir`, `export_dir`, Chroma path
 
 ## `src/japan_rental_agent/contracts/api.py`
 
-Đây là lớp định nghĩa contract chung giữa UI và Agent.
+Định nghĩa schema trao đổi giữa UI và agent:
 
-Các model chính:
+- `AgentRequest`
+- `AgentResponse`
+- `AgentData`
+- `AgentMeta`
+- `AgentError`
 
-- `AgentRequest`: payload UI gửi vào agent
-- `AgentResponse`: payload agent trả về
-- `AgentData`: phần dữ liệu kết quả như filters, listings, comparison, file
-- `AgentMeta`: metadata như tool đã dùng, confidence, processing time
-- `AgentError`: format lỗi chuẩn
-
-Phần này rất quan trọng vì nó giữ cho UI, agent và tools nói chuyện cùng một schema.
+Đây là contract ổn định để UI, agent và tool layer không phụ thuộc trực tiếp vào implementation nội bộ của nhau.
 
 ## `src/japan_rental_agent/domain/models.py`
 
-File này định nghĩa các model nghiệp vụ cốt lõi:
+Chứa các model nghiệp vụ:
 
 - `Listing`
 - `ListingScoreBreakdown`
 - `SearchFilters`
 - `ComparisonItem`
 
-Đây là lớp dữ liệu trung tâm cho bài toán tìm nhà.
+`Listing` hiện hỗ trợ cả dữ liệu local và dữ liệu public search, bao gồm `source_url`, `source_name`, `source_snippet`, `extraction_confidence` và `context_sources`.
 
 ## `src/japan_rental_agent/agent/`
 
-Thư mục này chứa phần orchestration theo LangGraph.
+Chứa LangGraph orchestration.
 
-### `state.py`
+Các file chính:
 
-Định nghĩa `RentalAgentState`, là state dùng xuyên suốt workflow.
+- `state.py`: định nghĩa `RentalAgentState`, bao gồm constraint, kết quả tìm kiếm, kết quả ranking, recent listings và compare state.
+- `graph.py`: nối các node thành workflow.
+- `service.py`: application service mà UI gọi vào.
+- `llm.py`: OpenAI-compatible client wrapper.
+- `nodes/`: implementation từng node trong graph.
 
-State hiện chứa các trường như:
+Luồng chính:
 
-- input gốc
-- parsed constraints
-- missing fields
-- search results
-- ranked results
-- error message
-- response payload
-
-Ngoài ra có `create_initial_state()` để chuyển từ `AgentRequest` sang state ban đầu.
-
-### `graph.py`
-
-Đây là nơi dựng LangGraph workflow.
-
-Flow hiện tại:
-
-1. `input`
-2. `intent_extraction`
-3. nếu thiếu thông tin -> `clarification`
-4. nếu đủ thông tin -> `listing_search`
-5. tiếp theo -> `enrichment_ranking`
-6. cuối cùng -> `response`
-7. nếu có lỗi -> `error_retry`
-
-### `service.py`
-
-`RentalAgentService` là lớp mà UI gọi vào.
-
-Nó có nhiệm vụ:
-
-- nhận `AgentRequest`
-- tạo initial state
-- invoke graph
-- convert kết quả cuối thành `AgentResponse`
-
-Bạn có thể xem nó như lớp application service bọc bên ngoài workflow.
-
-### `agent/nodes/`
-
-Mỗi file là một node nhỏ trong graph:
-
-- `input_node.py`: ghi nhận input user vào history
-- `intent_extraction.py`: gọi parser tool để lấy constraints
-- `router.py`: quyết định đi nhánh clarification hay search
-- `clarification.py`: tạo response dạng `need_clarification`
-- `search.py`: gọi search tool
-- `enrichment_ranking.py`: gọi enrichment và ranking tool
-- `error_retry.py`: tạo response lỗi chuẩn
-- `response.py`: tạo response thành công chuẩn
-
-Điểm cần lưu ý là các node hiện chỉ đang nối flow và trả dữ liệu placeholder đúng schema.
+1. input
+2. intent extraction
+3. clarification nếu thiếu dữ liệu
+4. listing search
+5. enrichment + ranking
+6. response
+7. error/retry nếu có lỗi
 
 ## `src/japan_rental_agent/tools/`
 
-Thư mục này là tool layer mà agent sẽ dùng.
+Tool layer được agent gọi từ các node.
 
-Các tool hiện có:
+Các tool chính:
 
-- `parser.py`
-- `search.py`
-- `enrichment.py`
-- `ranking.py`
-- `compare.py`
-- `export.py`
-
-Hiện tại tất cả mới là stub:
-
-- nhận input đúng format
-- trả output đúng contract cơ bản
-- chưa có xử lý business logic thật
-
-Điều này giúp chúng ta có thể phát triển từng phần sau mà không phải sửa lại kiến trúc.
+- `parser.py`: parse intent, constraint, compare criteria và language.
+- `search.py`: tìm listing bằng LangChain DDGS public search hoặc CSV/Chroma khi `SEARCH_PROVIDER=local`.
+- `enrichment.py`: bổ sung public context hoặc local context.
+- `ranking.py`: chấm điểm và sắp xếp listing.
+- `compare.py`: so sánh listing theo nhiều tiêu chí, resolve được từ ID, tên nhà hoặc `recent_listings`.
+- `export.py`: export kết quả sang file.
+- `support.py`: helper dùng chung cho parsing, normalize, CSV local và Chroma.
 
 ## `src/japan_rental_agent/data/`
 
-Phần này là data access layer sơ khai.
+Data access layer.
 
-### `repositories.py`
+Các phần chính:
 
-Hiện có:
+- `repositories.py`: registry cho local CSV files.
+- `vector_store.py`: Chroma vector store cho local mode.
+- `public_sources.py`: LangChain DDGS web search, provider public context, wrapper e-Stat API và wrapper MLIT API.
 
-- `DatasetRegistry`: quản lý đường dẫn các file data chuẩn
-- `LocalDatasetRepository`: lớp repository placeholder để sau này đọc CSV hoặc SQLite
+## `tests/`
 
-Phần này chưa load dữ liệu thật, nhưng đã chốt vị trí và naming cho datasets.
+Các nhóm test hiện có:
 
-## `data/`
+- smoke import và service initialization
+- agent flow
+- data seed
+- tool behavior
+- public source provider behavior
+- compare state/use cases
 
-Thư mục này để chứa dataset local và file export.
+Test dùng `SEARCH_PROVIDER=local` khi cần dữ liệu deterministic; public provider được test bằng fake search client để không phụ thuộc mạng.
 
-Hiện có:
+## Tài Liệu Liên Quan
 
-- `data/README.md`: mô tả các file data dự kiến
-- `data/exports/`: nơi chứa file export sinh ra sau này
-
-## `tests/test_smoke_imports.py`
-
-Đây là smoke test đơn giản nhất hiện có.
-
-Nó xác nhận rằng:
-
-- package import được
-- `RentalAgentService` khởi tạo được
-- service trả về `AgentResponse` hợp lệ
-
-## Trạng thái thực tế của code lúc này
-
-Hiện project đã sẵn sàng cho giai đoạn implement tiếp theo:
-
-- kiến trúc đã có
-- contract đã có
-- UI entrypoint đã có
-- workflow agent đã có
-- tool layer đã có khung
-
-Nhưng chưa có:
-
-- parser thật
-- search dataset thật
-- ranking thật
-- export thật
-- tích hợp Gemini model thật
-
-## Nên đọc file nào trước
-
-Nếu muốn nắm tổng quan nhanh, nên đọc theo thứ tự này:
-
-1. `README.md`
-2. `docs/smoke-test.md`
-3. `ui/app.py`
-4. `src/japan_rental_agent/contracts/api.py`
-5. `src/japan_rental_agent/agent/service.py`
-6. `src/japan_rental_agent/agent/graph.py`
-7. `src/japan_rental_agent/tools/*.py`
-
+- `README.md`: setup nhanh và trạng thái project.
+- `docs/usage-guide.md`: lệnh cài đặt, test, chạy hệ thống và luồng chat mẫu.
+- `docs/public-data-integration.md`: chiến lược tích hợp public data, LangChain DDGS, e-Stat và MLIT.
+- `docs/compare-state-cases.md`: các case state cho tool so sánh.
