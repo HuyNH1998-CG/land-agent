@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+import unicodedata
 from typing import Any
 
 from japan_rental_agent.agent.dependencies import AgentDependencies
@@ -16,8 +18,10 @@ def make_response_node(dependencies: AgentDependencies):
         tool_trace = list(state.get("tool_trace", []))
         intent_label = state.get("intent_label", "search")
         raw_listings = state.get("ranked_results") or state.get("search_results") or []
+        response_language = state.get("response_language", "vi")
         top_k = state.get("top_k", 5)
-        normalized_listings = normalize_listings(raw_listings, top_k=top_k)
+        search_more_limit = 5 if state.get("filters_used", {}).get("search_more") else None
+        normalized_listings = normalize_listings(raw_listings, top_k=search_more_limit)
         comparison_results: list[dict[str, Any]] = list(state.get("comparison_results", []))
         exported_file = state.get("exported_file")
 
@@ -82,11 +86,14 @@ def make_response_node(dependencies: AgentDependencies):
             output_format=export_format,
             tool_trace=tool_trace,
         )
-        if normalized_listings and _looks_like_no_result_reply(draft.reply):
+        if normalized_listings and (
+            _looks_like_no_result_reply(draft.reply)
+            or _reply_has_mismatched_listing_count(draft.reply, expected_count=len(normalized_listings))
+        ):
             draft.reply = _build_search_success_reply(
                 listings=normalized_listings,
                 filters_used=state.get("filters_used", {}),
-                language=state.get("response_language", "vi"),
+                language=response_language,
             )
         tool_trace.append("llm.response")
 
@@ -98,7 +105,7 @@ def make_response_node(dependencies: AgentDependencies):
                 "status": "success",
                 "reply": draft.reply,
                 "data": {
-                    "filters_used": state.get("filters_used", {}),
+                    "filters_used": {**state.get("filters_used", {}), "response_language": response_language},
                     "listings": normalized_listings,
                     "comparison": comparison_results,
                     "file": exported_file,
@@ -118,10 +125,10 @@ def make_response_node(dependencies: AgentDependencies):
 
 def _looks_like_no_result_reply(reply: str) -> bool:
     lowered = reply.lower()
+    lowered = unicodedata.normalize("NFKD", lowered)
+    lowered = "".join(character for character in lowered if not unicodedata.combining(character))
     no_result_markers = [
-        "không tìm thấy",
         "khong tim thay",
-        "không có kết quả",
         "khong co ket qua",
         "no results",
         "could not find",
@@ -130,13 +137,27 @@ def _looks_like_no_result_reply(reply: str) -> bool:
     return any(marker in lowered for marker in no_result_markers)
 
 
+def _reply_has_mismatched_listing_count(reply: str, *, expected_count: int) -> bool:
+    normalized = unicodedata.normalize("NFKD", reply.lower())
+    normalized = "".join(character for character in normalized if not unicodedata.combining(character))
+    count_patterns = [
+        r"(?:tim|found|find)\D{0,40}(\d{1,3})\D{0,24}(?:ket qua|lua chon|can ho|can|matches|results|listings|apartments)",
+        r"(\d{1,3})\D{0,24}(?:ket qua|lua chon|can ho|can|matches|results|listings|apartments)",
+    ]
+    for pattern in count_patterns:
+        match = re.search(pattern, normalized, re.IGNORECASE)
+        if match:
+            return int(match.group(1)) != expected_count
+    return False
+
+
 def _build_search_success_reply(
     *,
     listings: list[dict[str, Any]],
     filters_used: dict[str, Any],
     language: str,
 ) -> str:
-    city = filters_used.get("city") or filters_used.get("ward") or "khu vực bạn yêu cầu"
+    city = filters_used.get("city") or filters_used.get("ward") or "khu vuc ban yeu cau"
     max_rent = filters_used.get("max_rent")
     source_count = len({item.get("source_name") for item in listings if item.get("source_name")})
     if language == "en":
@@ -146,7 +167,7 @@ def _build_search_success_reply(
     budget_text = f" với ngân sách tối đa {max_rent:,} yên" if isinstance(max_rent, int) else ""
     return (
         f"Tôi tìm được {len(listings)} kết quả công khai tại {city}{budget_text}. "
-        "Các kết quả bên dưới có kèm link nguồn để bạn kiểm tra chi tiết."
+        "Tất cả kết quả bên dưới đều giữ link nguồn để bạn mở ra kiểm tra chi tiết."
     )
 
 
@@ -169,7 +190,7 @@ def _build_compare_reply(
         title = comparison_results[0].get("title") or comparison_results[0].get("id")
         if language == "en":
             return f"I only found one valid listing to compare: {title}."
-        return f"Tôi chỉ tìm thấy một căn hợp lệ để so sánh: {title}."
+        return f"Tôi mới xác định được 1 căn hợp lệ để so sánh: {title}."
 
     labels = [str(item.get("title") or item.get("id")) for item in comparison_results[:3]]
     if language == "en":

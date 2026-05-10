@@ -8,6 +8,7 @@ from japan_rental_agent.data.seed import LISTING_COLLECTION
 from japan_rental_agent.tools.support import (
     build_listing_document,
     create_vector_store,
+    derive_construction_year,
     listing_capacity,
     load_floor_plan_map,
     load_listings,
@@ -139,6 +140,7 @@ class ListingSearchTool:
             "layout": row["layout"],
             "area_m2": parse_float(row["area_m2"]),
             "building_age": parse_int(row["building_age"]),
+            "construction_year": derive_construction_year(row["building_age"]),
             "floor": parse_int(row["floor"]),
             "pet_allowed": parse_bool(row["pet_allowed"]),
             "foreigner_friendly": parse_bool(row["foreigner_friendly"]),
@@ -146,6 +148,7 @@ class ListingSearchTool:
             "lat": parse_float(row["lat"]),
             "lng": parse_float(row["lng"]),
             "floor_plan_asset": floor_plan_map.get(row["listing_id"]),
+            "image_urls": [],
             "document": build_listing_document(row),
         }
 

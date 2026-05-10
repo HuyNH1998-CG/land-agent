@@ -43,7 +43,9 @@ src/japan_rental_agent/tools/ranking.py
 src/japan_rental_agent/tools/search.py
 src/japan_rental_agent/tools/support.py
 tests/test_agent_flow.py
+tests/test_agent_graph_export.py
 tests/test_data_seed.py
 tests/test_public_sources.py
 tests/test_smoke_imports.py
 tests/test_tools.py
+tests/test_ui_helpers.py

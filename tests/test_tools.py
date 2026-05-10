@@ -51,6 +51,13 @@ def test_parser_extracts_core_constraints() -> None:
     assert parsed["constraints"]["near_station"] is True
 
 
+@pytest.mark.parametrize("message", ["tim nhà 1LDK tai sapporo", "tim nha 1LDK tai sapporo", "thuê nhà tại Sapporo"])
+def test_parser_detects_vietnamese_search_language(message: str) -> None:
+    parsed = QueryParserTool().execute(message)
+
+    assert parsed["response_language"] == "vi"
+
+
 @pytest.mark.parametrize(
     ("message", "expected_max_rent"),
     [

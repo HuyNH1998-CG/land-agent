@@ -5,6 +5,7 @@ from typing import Any
 from japan_rental_agent.config import AppConfig
 from japan_rental_agent.data.public_sources import PublicContextProvider
 from japan_rental_agent.tools.support import (
+    derive_construction_year,
     load_city_context_map,
     load_floor_plan_map,
     load_hazard_map,
@@ -55,6 +56,8 @@ class AreaEnrichmentTool:
                 {
                     "floor_plan_asset": enriched_listing.get("floor_plan_asset")
                     or floor_plan_map.get(str(listing.get("listing_id") or listing.get("id"))),
+                    "construction_year": enriched_listing.get("construction_year")
+                    or derive_construction_year(enriched_listing.get("building_age")),
                     "flood_risk_score": parse_float(hazard.get("flood_risk_score")),
                     "earthquake_risk_score": parse_float(hazard.get("earthquake_risk_score")),
                     "overall_safety_score": safety_score,
@@ -88,6 +91,8 @@ class AreaEnrichmentTool:
                     "public_context": area_context,
                     "context_sources": sorted(area_context.get("datasets", {}).keys()),
                     "overall_safety_score": listing.get("overall_safety_score"),
+                    "construction_year": listing.get("construction_year")
+                    or derive_construction_year(listing.get("building_age")),
                     "source_url": listing.get("source_url"),
                     "source_name": listing.get("source_name"),
                     "extraction_confidence": listing.get("extraction_confidence"),

@@ -54,8 +54,10 @@ class StaticSearchTool:
 
     def __init__(self, results: list[dict]) -> None:
         self.results = results
+        self.last_filters: dict | None = None
 
     def execute(self, filters: dict) -> dict:
+        self.last_filters = dict(filters)
         return {"results": self.results, "total": len(self.results), "filters_used": filters}
 
 
@@ -583,6 +585,176 @@ def test_compare_same_area_from_recent_results_asks_again_when_area_is_ambiguous
     assert "compare.clarification" in response.meta.tool_used
 
 
+def test_search_more_request_excludes_recent_results() -> None:
+    search_tool = StaticSearchTool(
+        [
+            {
+                "listing_id": "new_apt",
+                "title": "New apartment",
+                "city": "Sapporo",
+                "rent_yen": 52000,
+                "layout": "1K",
+                "area_m2": 24.0,
+                "source_url": "https://suumo.jp/chintai/bc_200/",
+            }
+        ]
+    )
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                intent="search",
+                normalized_query="tìm thêm kết quả khác",
+                constraints={},
+                missing_fields=[],
+                confidence=0.84,
+            ),
+        ),
+        search_tool=search_tool,
+        parser_tool=QueryParserTool(),
+    )
+
+    response = service.handle_request(
+        AgentRequest(
+            session_id="search-more",
+            message="tìm thêm kết quả khác",
+            context={
+                "previous_filters": {
+                    "city": "Sapporo",
+                    "max_rent": 60000,
+                    "preferred_layout": "1K",
+                    "result_page": 1,
+                    "search_provider": "web",
+                    "search_queries": ["old query"],
+                    "exclude_source_urls": ["https://example.com/old-exclude"],
+                },
+                "recent_listings": [
+                    {
+                        "id": "old_apt",
+                        "title": "Old apartment",
+                        "city": "Sapporo",
+                        "source_url": "https://suumo.jp/chintai/bc_100/",
+                    }
+                ],
+            },
+        )
+    )
+
+    assert response.status == "success"
+    assert search_tool.last_filters is not None
+    assert search_tool.last_filters["search_more"] is True
+    assert search_tool.last_filters["result_page"] == 2
+    assert search_tool.last_filters["city"] == "Sapporo"
+    assert search_tool.last_filters["max_rent"] == 60000
+    assert search_tool.last_filters["preferred_layout"] == "1K"
+    assert "search_provider" not in search_tool.last_filters
+    assert "search_queries" not in search_tool.last_filters
+    assert search_tool.last_filters["exclude_listing_ids"] == ["old_apt"]
+    assert search_tool.last_filters["exclude_source_urls"] == ["https://suumo.jp/chintai/bc_100/"]
+
+
+def test_search_more_uses_previous_conditions_even_when_model_requests_clarification() -> None:
+    search_tool = StaticSearchTool(
+        [
+            {
+                "listing_id": "new_apt",
+                "id": "new_apt",
+                "title": "New apartment",
+                "city": "Sapporo",
+                "rent_yen": 52000,
+                "source_url": "https://suumo.jp/chintai/bc_200/",
+            }
+        ]
+    )
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                intent="search",
+                normalized_query="more results",
+                constraints={},
+                missing_fields=["city"],
+                confidence=0.62,
+            ),
+        ),
+        search_tool=search_tool,
+        parser_tool=QueryParserTool(),
+    )
+
+    response = service.handle_request(
+        AgentRequest(
+            session_id="search-more-preserve-conditions",
+            message="more results",
+            context={
+                "previous_filters": {"city": "Sapporo", "max_rent": 60000},
+                "recent_listings": [
+                    {
+                        "id": "old_apt",
+                        "title": "Old apartment",
+                        "source_url": "https://suumo.jp/chintai/bc_100/",
+                    }
+                ],
+            },
+        )
+    )
+
+    assert response.status == "success"
+    assert search_tool.last_filters is not None
+    assert search_tool.last_filters["city"] == "Sapporo"
+    assert search_tool.last_filters["max_rent"] == 60000
+    assert response.data.missing_fields == []
+
+
+def test_search_more_response_returns_up_to_five_additional_options() -> None:
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                intent="search",
+                normalized_query="tìm thêm kết quả khác",
+                constraints={},
+                missing_fields=[],
+                confidence=0.84,
+            ),
+        ),
+        search_tool=StaticSearchTool(
+            [
+                {
+                    "listing_id": f"new_{index}",
+                    "id": f"new_{index}",
+                    "title": f"New apartment {index}",
+                    "city": "Sapporo",
+                    "rent_yen": 50000 + index,
+                    "layout": "1K",
+                    "area_m2": 20.0 + index,
+                    "source_url": f"https://suumo.jp/chintai/bc_20{index}/",
+                }
+                for index in range(1, 9)
+            ]
+        ),
+        parser_tool=QueryParserTool(),
+    )
+
+    response = service.handle_request(
+        AgentRequest(
+            session_id="search-more-limit",
+            message="tìm thêm kết quả khác",
+            context={
+                "previous_filters": {"city": "Sapporo"},
+                "recent_listings": [
+                    {
+                        "id": "old_apt",
+                        "title": "Old apartment",
+                        "city": "Sapporo",
+                        "source_url": "https://suumo.jp/chintai/bc_100/",
+                    }
+                ],
+            },
+        )
+    )
+
+    assert response.status == "success"
+    assert len(response.data.listings) == 5
+    assert response.data.filters_used["search_more"] is True
+
+
 def test_search_response_overrides_no_result_reply_when_listings_exist() -> None:
     service = build_service(
         FakeAgentModel(
@@ -617,3 +789,41 @@ def test_search_response_overrides_no_result_reply_when_listings_exist() -> None
     assert response.data.listings
     assert "không tìm thấy" not in response.reply.lower()
     assert "1" in response.reply
+
+
+def test_search_response_count_matches_rendered_listings() -> None:
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                normalized_query="Find me a rental in Sapporo",
+                constraints={"city": "Sapporo"},
+                missing_fields=[],
+                confidence=0.8,
+            ),
+            response=ResponseDraft(
+                reply="Tôi đã tìm thấy 11 căn hộ phù hợp với yêu cầu.",
+                confidence=0.9,
+            ),
+        ),
+        search_tool=StaticSearchTool(
+            [
+                {
+                    "listing_id": f"web_{index}",
+                    "id": f"web_{index}",
+                    "title": f"Sapporo rental apartment {index}",
+                    "city": "Sapporo",
+                    "rent_yen": 50000 + index,
+                    "source_url": f"https://www.chintai.net/detail/bk-{index}/",
+                    "source_name": "chintai.net",
+                }
+                for index in range(1, 4)
+            ]
+        ),
+    )
+
+    response = service.handle_request(AgentRequest(session_id="count-match", message="Find me a rental in Sapporo"))
+
+    assert len(response.data.listings) == 3
+    assert "3" in response.reply
+    assert "11" not in response.reply
+    assert response.data.filters_used["response_language"] == "vi"

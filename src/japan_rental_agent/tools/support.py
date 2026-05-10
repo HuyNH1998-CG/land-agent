@@ -4,6 +4,7 @@ import csv
 import json
 import re
 import unicodedata
+from datetime import date
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -16,7 +17,7 @@ COMPARE_CRITERIA_KEYWORDS: list[tuple[str, tuple[str, ...]]] = [
     ("size", ("area", "size", "space", "sqm", "m2", "dien tich")),
     ("location", ("location", "station", "distance", "walk", "vi tri", "ga")),
     ("safety", ("safety", "hazard", "safe", "an toan")),
-    ("age", ("age", "building age", "newer", "older", "tuoi toa nha")),
+    ("age", ("age", "building age", "construction year", "year built", "newer", "older", "tuoi toa nha", "nam xay")),
     ("pet_allowed", ("pet", "pets", "dog", "cat", "thu cung", "pet friendly")),
     ("foreigner_friendly", ("foreigner", "foreigners", "international", "nguoi nuoc ngoai")),
 ]
@@ -25,10 +26,10 @@ CRITERION_LABELS: dict[str, dict[str, str]] = {
     "price": {"en": "price", "vi": "giá thuê"},
     "size": {"en": "size", "vi": "diện tích"},
     "location": {"en": "location", "vi": "vị trí"},
-    "safety": {"en": "safety", "vi": "độ an toàn"},
-    "age": {"en": "building age", "vi": "tuổi tòa nhà"},
+    "safety": {"en": "safety", "vi": "an toàn"},
+    "age": {"en": "construction year", "vi": "năm khởi xây"},
     "pet_allowed": {"en": "pet policy", "vi": "chính sách thú cưng"},
-    "foreigner_friendly": {"en": "foreigner-friendly policy", "vi": "mức độ phù hợp cho người nước ngoài"},
+    "foreigner_friendly": {"en": "foreigner-friendly policy", "vi": "phù hợp cho người nước ngoài"},
 }
 
 DEFAULT_COMPARE_CRITERIA = ["price", "size", "location", "safety"]
@@ -52,7 +53,28 @@ def tokenize_text(value: str) -> list[str]:
 
 def detect_language(value: str) -> str:
     normalized = normalize_text(value)
-    if any(token in normalized for token in ["sosanh", "giathue", "dientich", "vitri", "antoan", "canho"]):
+    vietnamese_tokens = [
+        "sosanh",
+        "timnha",
+        "thuenha",
+        "nhathue",
+        "giathue",
+        "dientich",
+        "vitri",
+        "antoan",
+        "canho",
+        "luachon",
+        "phuhop",
+        "yeucau",
+        "chotoi",
+        "nguoinuocngoai",
+    ]
+    vietnamese_words = set(normalize_phrase(value).split())
+    if any(token in normalized for token in vietnamese_tokens):
+        return "vi"
+    if {"tim", "nha"} <= vietnamese_words or {"thue", "nha"} <= vietnamese_words:
+        return "vi"
+    if "tai" in vietnamese_words and any(token in vietnamese_words for token in {"nha", "can", "phong", "sapporo", "tokyo"}):
         return "vi"
     return "en"
 
@@ -129,7 +151,8 @@ def resolve_recent_listing_candidates(
 
     if parsed_constraints.get("ward"):
         matches = [
-            item for item in recent_listings
+            item
+            for item in recent_listings
             if normalize_text(str(item.get("ward", ""))) == normalize_text(str(parsed_constraints["ward"]))
         ]
         if len(matches) >= 2:
@@ -138,8 +161,10 @@ def resolve_recent_listing_candidates(
     station_value = parsed_constraints.get("nearest_station") or parsed_constraints.get("station")
     if station_value:
         matches = [
-            item for item in recent_listings
-            if normalize_text(str(item.get("nearest_station") or item.get("station") or "")) == normalize_text(str(station_value))
+            item
+            for item in recent_listings
+            if normalize_text(str(item.get("nearest_station") or item.get("station") or ""))
+            == normalize_text(str(station_value))
         ]
         if len(matches) >= 2:
             return [str(item["id"]) for item in matches[:max_results]]
@@ -212,6 +237,13 @@ def parse_float(value: str | int | float | None) -> float | None:
     if isinstance(value, int):
         return float(value)
     return float(value)
+
+
+def derive_construction_year(building_age: str | int | float | None, *, reference_year: int | None = None) -> int | None:
+    age = parse_int(building_age)
+    if age is None or age < 0:
+        return None
+    return (reference_year or date.today().year) - age
 
 
 def ensure_parent_dir(path: Path) -> None:
@@ -326,11 +358,7 @@ def resolve_listing_identifiers(config: AppConfig, identifiers: list[str], *, li
         if not identifier_norm:
             continue
 
-        exact_matches = sorted(
-            entry["listing_id"]
-            for entry in title_index
-            if entry["title_norm"] == identifier_norm
-        )
+        exact_matches = sorted(entry["listing_id"] for entry in title_index if entry["title_norm"] == identifier_norm)
         if exact_matches:
             match = exact_matches[0]
             if match not in seen:
@@ -340,11 +368,7 @@ def resolve_listing_identifiers(config: AppConfig, identifiers: list[str], *, li
                     return resolved
             continue
 
-        substring_matches = sorted(
-            entry["listing_id"]
-            for entry in title_index
-            if identifier_norm in entry["title_norm"]
-        )
+        substring_matches = sorted(entry["listing_id"] for entry in title_index if identifier_norm in entry["title_norm"])
         if substring_matches:
             match = substring_matches[0]
             if match not in seen:
@@ -390,6 +414,7 @@ def build_listing_document(listing: dict[str, Any]) -> str:
         f"walk {listing.get('walk_min') or listing.get('distance_to_station_min') or 'unknown'} minutes",
         f"station {listing.get('nearest_station') or listing.get('station') or 'unknown'}",
         f"area {listing.get('area_m2') or 'unknown'} sqm",
+        f"year built {listing.get('construction_year') or 'unknown'}",
     ]
     return ". ".join(part for part in parts if part and part != ".")
 
