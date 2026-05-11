@@ -148,6 +148,13 @@ class FallbackAgentModel:
         missing_fields: list[str],
         conversation_history: list[dict[str, str]],
     ) -> ClarificationOutput:
+        if missing_fields == ["city"]:
+            return ClarificationOutput(
+                reply="Bạn muốn tìm nhà ở thành phố nào?",
+                missing_fields=missing_fields,
+                confidence=0.3,
+            )
+
         fields = ", ".join(missing_fields) if missing_fields else "một vài thông tin bổ sung"
         return ClarificationOutput(
             reply=f"Vui lòng cho tôi biết {fields} để tôi tiếp tục tìm nhà.",

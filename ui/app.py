@@ -20,16 +20,14 @@ if str(SRC_DIR) not in sys.path:
 from japan_rental_agent.agent import RentalAgentService
 from japan_rental_agent.config import AppConfig
 from japan_rental_agent.contracts import AgentRequest, RequestContext, RequestOptions
-from japan_rental_agent.tools.support import detect_language
 
-
-st.set_page_config(page_title="Japan Rental Agent", layout="wide")
+st.set_page_config(page_title="Trợ lý thuê nhà Nhật Bản", layout="wide")
 
 SAMPLE_PROMPTS = [
-    "1LDK in Sapporo under 85,000 JPY",
-    "Pet-friendly Tokyo commute",
-    "Compare selected listings",
-    "Export shortlist as CSV",
+    "Tìm căn 1LDK ở Sapporo dưới 85,000 yên",
+    "Tìm căn cho nuôi thú cưng, đi lại thuận tiện ở Tokyo",
+    "So sánh các căn đã chọn",
+    "Xuất danh sách rút gọn dạng CSV",
 ]
 
 CUSTOM_CSS = """
@@ -319,9 +317,9 @@ def render_app_header() -> None:
     st.markdown(
         """
         <div class="app-hero">
-            <div class="app-eyebrow">Rental decision workspace</div>
-            <h1>Japan Rental Agent</h1>
-            <p>Search rental listings, compare tradeoffs, and export a shortlist without leaving the chat flow.</p>
+            <div class="app-eyebrow">Không gian chọn nhà thuê</div>
+            <h1>Trợ lý thuê nhà Nhật Bản</h1>
+            <p>Tìm nhà thuê, so sánh điểm đánh đổi và xuất danh sách rút gọn ngay trong luồng chat.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -332,13 +330,13 @@ def render_empty_state() -> None:
     st.markdown(
         """
         <div class="empty-panel">
-            <h3>Start with a practical rental brief</h3>
-            <p>Use a budget, city, layout, station preference, commute target, or ask to compare saved listings.</p>
+            <h3>Bắt đầu bằng nhu cầu thuê nhà cụ thể</h3>
+            <p>Hãy nhập ngân sách, thành phố, loại phòng, ga muốn ở gần, thời gian đi lại, hoặc yêu cầu so sánh các căn đã lưu.</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
-    st.markdown('<div class="section-label">Try a prompt</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Gợi ý nhanh</div>', unsafe_allow_html=True)
     columns = st.columns(2)
     for index, prompt in enumerate(SAMPLE_PROMPTS):
         with columns[index % 2]:
@@ -382,35 +380,35 @@ def resize_svg_markup(svg_text: str, *, max_width_px: int) -> str:
 
 
 def format_currency(value: int | None) -> str:
-    return f"{value:,} JPY" if isinstance(value, int) else "n/a"
+    return f"{value:,} yên" if isinstance(value, int) else "chưa rõ"
 
 
 def format_area(value: float | None) -> str:
-    return f"{value:.2f} m2" if isinstance(value, (float, int)) else "n/a"
+    return f"{value:.2f} m²" if isinstance(value, (float, int)) else "chưa rõ"
 
 
 def format_year(value: int | None) -> str:
-    return str(value) if isinstance(value, int) else "n/a"
+    return str(value) if isinstance(value, int) else "chưa rõ"
 
 
 def format_minutes(value: int | None) -> str:
-    return f"{value} min" if isinstance(value, int) else "n/a"
+    return f"{value} phút" if isinstance(value, int) else "chưa rõ"
 
 
 def format_integer(value: int | None) -> str:
-    return f"{value:,}" if isinstance(value, int) else "n/a"
+    return f"{value:,}" if isinstance(value, int) else "chưa rõ"
 
 
 def format_percent(value: float | None) -> str:
-    return f"{value:.1%}" if isinstance(value, (float, int)) else "n/a"
+    return f"{value:.1%}" if isinstance(value, (float, int)) else "chưa rõ"
 
 
 def format_score(value: float | None) -> str:
-    return f"{value:.4f}" if isinstance(value, (float, int)) else "n/a"
+    return f"{value:.4f}" if isinstance(value, (float, int)) else "chưa rõ"
 
 
 def format_compact_score(value: float | None) -> str:
-    return f"{value:.2f}" if isinstance(value, (float, int)) else "n/a"
+    return f"{value:.2f}" if isinstance(value, (float, int)) else "chưa rõ"
 
 
 
@@ -452,25 +450,15 @@ def merge_additional_listings(
 
 
 def listing_summary(listing: dict[str, Any], *, language: str) -> str:
-    title = str(listing.get("title") or "listing").strip()
+    title = str(listing.get("title") or "căn hộ").strip()
     location = " ".join(str(part) for part in [listing.get("city"), listing.get("ward")] if part)
     station = listing.get("nearest_station") or listing.get("station")
     rent = format_currency(listing.get("rent") or listing.get("rent_yen"))
     area = format_area(listing.get("area_m2"))
-    layout = listing.get("layout") or "n/a"
+    layout = listing.get("layout") or "chưa rõ"
     walk = format_minutes(listing.get("distance_to_station_min") or listing.get("walk_min"))
     year = format_year(listing.get("construction_year"))
-    source = listing.get("source_name") or "source"
-
-    if language == "en":
-        pieces = [f"{title} is a {layout} rental"]
-        if location:
-            pieces.append(f"in {location}")
-        pieces.append(
-            f"with rent {rent}, area {area}, year built {year}, and {walk} to {station or 'the nearest station'}."
-        )
-        pieces.append(f"Source: {source}.")
-        return " ".join(pieces)
+    source = listing.get("source_name") or "nguồn"
 
     pieces = [f"{title} là căn {layout}"]
     if location:
@@ -483,13 +471,9 @@ def listing_summary(listing: dict[str, Any], *, language: str) -> str:
 
 
 def build_search_more_reply(*, added_count: int, total_count: int, language: str) -> str:
-    if language == "en":
-        if added_count:
-            return f"I added {added_count} more option(s) to the current list. The list now has {total_count} option(s)."
-        return "I could not find any new options beyond the current list."
     if added_count:
-        return f"Toi da bo sung {added_count} lua chon moi vao danh sach hien tai. Danh sach hien co {total_count} lua chon."
-    return "Toi chua tim duoc lua chon moi ngoai danh sach hien tai."
+        return f"Tôi đã bổ sung {added_count} lựa chọn mới vào danh sách hiện tại. Danh sách hiện có {total_count} lựa chọn."
+    return "Tôi chưa tìm được lựa chọn mới ngoài danh sách hiện tại."
 
 
 def build_conversation_history(limit: int = 8) -> list[dict[str, str]]:
@@ -509,7 +493,7 @@ def build_gallery_items(listing: dict[str, Any], *, language: str = "vi") -> lis
             if not candidate or candidate in seen:
                 continue
             seen.add(candidate)
-            label = f"Ảnh {index}" if language == "vi" else f"Image {index}"
+            label = f"Ảnh {index}"
             items.append({"kind": "remote", "value": candidate, "label": label})
 
     floor_plan_asset = resolve_workspace_path(listing.get("floor_plan_asset"))
@@ -517,7 +501,7 @@ def build_gallery_items(listing: dict[str, Any], *, language: str = "vi") -> lis
         candidate = str(floor_plan_asset)
         if candidate not in seen:
             seen.add(candidate)
-            label = "Mặt bằng" if language == "vi" else "Floor plan"
+            label = "Mặt bằng"
             items.append({"kind": "asset", "value": candidate, "label": label})
 
     return items
@@ -540,7 +524,7 @@ def render_gallery_item(item: dict[str, str], *, max_width_px: int) -> None:
 def render_image_gallery(listing: dict[str, Any], *, gallery_key: str, max_width_px: int = 320, language: str = "vi") -> None:
     gallery_items = build_gallery_items(listing, language=language)
     if not gallery_items:
-        st.caption("Chưa có hình ảnh" if language == "vi" else "No image available")
+        st.caption("Chưa có hình ảnh")
         return
 
     index_key = f"gallery_index_{gallery_key}"
@@ -549,14 +533,14 @@ def render_image_gallery(listing: dict[str, Any], *, gallery_key: str, max_width
 
     nav_left, nav_center, nav_right = st.columns([1, 2, 1])
     with nav_left:
-        prev_label = "Trước" if language == "vi" else "Prev"
+        prev_label = "Trước"
         if st.button(prev_label, key=f"{gallery_key}_prev", disabled=current_index == 0, use_container_width=True):
             st.session_state[index_key] = current_index - 1
             st.rerun()
     with nav_center:
         st.caption(f"{gallery_items[current_index]['label']} ({current_index + 1}/{len(gallery_items)})")
     with nav_right:
-        next_label = "Tiếp" if language == "vi" else "Next"
+        next_label = "Tiếp"
         if st.button(
             next_label,
             key=f"{gallery_key}_next",
@@ -588,10 +572,7 @@ def render_badges(items: list[tuple[str, str]]) -> None:
 
 
 def effective_message_language(message: dict[str, Any]) -> str:
-    content_language = detect_language(str(message.get("content") or ""))
-    if content_language == "vi":
-        return "vi"
-    return str(message.get("language") or "vi")
+    return "vi"
 
 
 def toggle_listing(selected: bool, listing_id: str) -> None:
@@ -611,19 +592,17 @@ def clear_selected_listings() -> None:
 
 
 def context_source_label(source: str, *, language: str) -> str:
-    labels_vi = {
+    labels = {
         "housing_land_survey": "khảo sát nhà ở và đất đai",
         "mlit_real_estate": "ngữ cảnh thị trường MLIT",
         "hazard_safety": "rủi ro thiên tai và an toàn",
         "regional_indicators": "chỉ số khu vực",
     }
-    if language == "vi":
-        return labels_vi.get(source, source.replace("_", " "))
-    return source.replace("_", " ")
+    return labels.get(source, source.replace("_", " "))
 
 
 def nearby_facility_label(facility: str, *, language: str) -> str:
-    labels_vi = {
+    labels = {
         "convenience_store": "conbini / cửa hàng tiện lợi",
         "supermarket": "siêu thị",
         "drugstore": "drugstore / nhà thuốc",
@@ -632,22 +611,10 @@ def nearby_facility_label(facility: str, *, language: str) -> str:
         "school": "trường học",
         "shopping_mall": "trung tâm mua sắm",
     }
-    labels_en = {
-        "convenience_store": "convenience store",
-        "supermarket": "supermarket",
-        "drugstore": "drugstore / pharmacy",
-        "park": "park",
-        "hospital": "hospital or clinic",
-        "school": "school",
-        "shopping_mall": "shopping mall",
-    }
-    labels = labels_vi if language == "vi" else labels_en
     return labels.get(facility, facility.replace("_", " "))
 
 
 def localized_market_note(note: str, *, language: str) -> str:
-    if language != "vi":
-        return note
     known_notes = {
         "Central wards are transit-strong; outer wards trade commute time for larger floor area.": (
             "Các quận trung tâm mạnh về giao thông; các quận xa trung tâm hơn thường đổi thời gian đi lại lấy diện tích lớn hơn."
@@ -660,24 +627,20 @@ def build_nearby_facility_note(listing: dict[str, Any], *, language: str) -> str
     facilities = list(dict.fromkeys(str(item) for item in listing.get("nearby_facilities", []) if str(item).strip()))
     if facilities:
         labels = ", ".join(nearby_facility_label(item, language=language) for item in facilities)
-        if language == "vi":
-            return f"Tiện ích quanh nhà: có nhắc tới {labels}"
-        return f"Nearby amenities mentioned: {labels}"
+        return f"Tiện ích quanh nhà: có nhắc tới {labels}"
     if listing.get("shopping_convenience_score") is not None:
-        if language == "vi":
-            return "Tiện ích quanh nhà: chưa có tên conbini/siêu thị cụ thể; hiện chỉ có điểm tiện mua sắm theo khu vực ga"
-        return "Nearby amenities: no specific convenience store or supermarket name was found; only the station-area shopping score is available"
+        return "Tiện ích quanh nhà: chưa có tên conbini/siêu thị cụ thể; hiện chỉ có điểm tiện mua sắm theo khu vực ga"
     return None
 
 
 def build_enrichment_metric_items(listing: dict[str, Any], *, language: str) -> list[tuple[str, str]]:
     labels = {
-        "safety": "An toàn" if language == "vi" else "Safety",
-        "commute": "Tới trung tâm" if language == "vi" else "Commute To Center",
-        "walkability": "Đi bộ" if language == "vi" else "Walkability",
-        "shopping": "Tiện mua sắm" if language == "vi" else "Shopping",
-        "winter_transit": "Giao thông mùa đông" if language == "vi" else "Winter Transit",
-        "foreign_support": "Hỗ trợ người nước ngoài" if language == "vi" else "Foreign Support",
+        "safety": "An toàn",
+        "commute": "Tới trung tâm",
+        "walkability": "Đi bộ",
+        "shopping": "Tiện mua sắm",
+        "winter_transit": "Giao thông mùa đông",
+        "foreign_support": "Hỗ trợ người nước ngoài",
     }
     candidates = [
         (labels["safety"], format_compact_score(listing.get("overall_safety_score")), listing.get("overall_safety_score")),
@@ -708,49 +671,39 @@ def build_enrichment_note_bits(listing: dict[str, Any], *, language: str) -> lis
     if nearby_note:
         bits.append(nearby_note)
     if listing.get("flood_risk_score") is not None:
-        label = "Rủi ro ngập" if language == "vi" else "Flood risk"
-        bits.append(f"{label}: {format_compact_score(listing.get('flood_risk_score'))}")
+        bits.append(f"Rủi ro ngập: {format_compact_score(listing.get('flood_risk_score'))}")
     if listing.get("earthquake_risk_score") is not None:
-        label = "Rủi ro động đất" if language == "vi" else "Earthquake risk"
-        bits.append(f"{label}: {format_compact_score(listing.get('earthquake_risk_score'))}")
+        bits.append(f"Rủi ro động đất: {format_compact_score(listing.get('earthquake_risk_score'))}")
     if listing.get("winter_livability_score") is not None:
-        label = "Mức sống mùa đông" if language == "vi" else "Winter livability"
-        bits.append(f"{label}: {format_compact_score(listing.get('winter_livability_score'))}")
+        bits.append(f"Mức sống mùa đông: {format_compact_score(listing.get('winter_livability_score'))}")
     if listing.get("city_renter_household_ratio") is not None:
-        label = "Tỷ lệ hộ thuê" if language == "vi" else "Renter households"
-        bits.append(f"{label}: {format_percent(listing.get('city_renter_household_ratio'))}")
+        bits.append(f"Tỷ lệ hộ thuê: {format_percent(listing.get('city_renter_household_ratio'))}")
     if listing.get("city_avg_rent_1k_yen") is not None:
-        label = "Giá thuê TB 1K khu vực" if language == "vi" else "City avg 1K"
-        bits.append(f"{label}: {format_currency(listing.get('city_avg_rent_1k_yen'))}")
+        bits.append(f"Giá thuê TB 1K khu vực: {format_currency(listing.get('city_avg_rent_1k_yen'))}")
     if listing.get("city_avg_rent_1ldk_yen") is not None:
-        label = "Giá thuê TB 1LDK khu vực" if language == "vi" else "City avg 1LDK"
-        bits.append(f"{label}: {format_currency(listing.get('city_avg_rent_1ldk_yen'))}")
+        bits.append(f"Giá thuê TB 1LDK khu vực: {format_currency(listing.get('city_avg_rent_1ldk_yen'))}")
     if listing.get("city_population_estimate") is not None:
-        label = "Dân số ước tính" if language == "vi" else "Population"
-        bits.append(f"{label}: {format_integer(listing.get('city_population_estimate'))}")
+        bits.append(f"Dân số ước tính: {format_integer(listing.get('city_population_estimate'))}")
     if listing.get("context_sources"):
         sources = ", ".join(context_source_label(str(source), language=language) for source in listing.get("context_sources", [])[:3])
-        label = "Nguồn ngữ cảnh" if language == "vi" else "Context"
-        bits.append(f"{label}: {sources}")
+        bits.append(f"Nguồn ngữ cảnh: {sources}")
     if listing.get("extraction_confidence") is not None:
-        label = "Độ tin cậy trích xuất" if language == "vi" else "Extraction confidence"
-        bits.append(f"{label}: {format_percent(listing.get('extraction_confidence'))}")
+        bits.append(f"Độ tin cậy trích xuất: {format_percent(listing.get('extraction_confidence'))}")
     if listing.get("market_note"):
-        label = "Ghi chú thị trường" if language == "vi" else "Market"
-        bits.append(f"{label}: {localized_market_note(str(listing.get('market_note')), language=language)}")
+        bits.append(f"Ghi chú thị trường: {localized_market_note(str(listing.get('market_note')), language=language)}")
     return bits
 
 
 def render_listing_card(listing: dict[str, Any], message_index: int, *, language: str) -> None:
-    station = listing.get("nearest_station") or listing.get("station") or "Unknown station"
+    station = listing.get("nearest_station") or listing.get("station") or "Chưa rõ ga"
     walk_minutes = listing.get("distance_to_station_min") or listing.get("walk_min")
     rent = format_currency(listing.get("rent") or listing.get("rent_yen"))
-    title = escape(str(listing.get("title") or "Untitled listing"))
-    location = escape(" ".join(str(part) for part in [listing.get("city"), listing.get("ward")] if part) or "Location n/a")
-    layout = escape(str(listing.get("layout") or "n/a"))
+    title = escape(str(listing.get("title") or "Chưa có tiêu đề"))
+    location = escape(" ".join(str(part) for part in [listing.get("city"), listing.get("ward")] if part) or "Chưa rõ khu vực")
+    layout = escape(str(listing.get("layout") or "chưa rõ"))
     station_label = escape(str(station))
     walk_label = escape(format_minutes(walk_minutes))
-    monthly_caption = "tiền thuê hàng tháng" if language == "vi" else "monthly rent"
+    monthly_caption = "tiền thuê hàng tháng"
 
     st.markdown(
         f"""
@@ -770,58 +723,52 @@ def render_listing_card(listing: dict[str, Any], message_index: int, *, language
 
     badge_items: list[tuple[str, str]] = []
     if listing.get("source_validated") is True:
-        badge_items.append(("Nguồn đã xác thực" if language == "vi" else "Validated source", "info"))
+        badge_items.append(("Nguồn đã xác thực", "info"))
     if listing.get("foreigner_friendly") is True:
-        badge_items.append(("Hỗ trợ người nước ngoài" if language == "vi" else "Foreigner friendly", "good"))
+        badge_items.append(("Hỗ trợ người nước ngoài", "good"))
     if listing.get("pet_allowed") is True:
-        badge_items.append(("Cho nuôi thú cưng" if language == "vi" else "Pet allowed", "good"))
+        badge_items.append(("Cho nuôi thú cưng", "good"))
     if listing.get("overall_safety_score") is not None:
-        label = "An toàn" if language == "vi" else "Safety"
-        badge_items.append((f"{label} {format_compact_score(listing.get('overall_safety_score'))}", "warn"))
+        badge_items.append((f"An toàn {format_compact_score(listing.get('overall_safety_score'))}", "warn"))
     if listing.get("commute_time_min") is not None:
-        label = "Tới trung tâm" if language == "vi" else "Commute"
-        badge_items.append((f"{label} {format_minutes(listing.get('commute_time_min'))}", "info"))
+        badge_items.append((f"Tới trung tâm {format_minutes(listing.get('commute_time_min'))}", "info"))
     if listing.get("winter_transit_reliability_score") is not None:
-        label = "Giao thông mùa đông" if language == "vi" else "Winter transit"
-        badge_items.append((f"{label} {format_compact_score(listing.get('winter_transit_reliability_score'))}", "info"))
+        badge_items.append((f"Giao thông mùa đông {format_compact_score(listing.get('winter_transit_reliability_score'))}", "info"))
     if listing.get("foreign_resident_support_score") is not None:
-        label = "Hỗ trợ người nước ngoài" if language == "vi" else "Foreign support"
-        badge_items.append((f"{label} {format_compact_score(listing.get('foreign_resident_support_score'))}", "good"))
+        badge_items.append((f"Hỗ trợ người nước ngoài {format_compact_score(listing.get('foreign_resident_support_score'))}", "good"))
     render_badges(badge_items)
 
     key = f"select_{message_index}_{listing['id']}"
     if key not in st.session_state:
         st.session_state[key] = listing["id"] in st.session_state["selected_listings"]
-    selected = st.checkbox("Thêm vào so sánh" if language == "vi" else "Add to compare", key=key)
+    selected = st.checkbox("Thêm vào so sánh", key=key)
     toggle_listing(selected, listing["id"])
 
     details_col, gallery_col = st.columns([1.35, 1], gap="large")
     with details_col:
         render_metric_grid(
             [
-                ("Giá thuê" if language == "vi" else "Rent", rent),
-                ("Diện tích" if language == "vi" else "Area", format_area(listing.get("area_m2"))),
-                ("Năm xây" if language == "vi" else "Year Built", format_year(listing.get("construction_year"))),
-                ("Đi bộ tới ga" if language == "vi" else "Walk To Station", format_minutes(walk_minutes)),
+                ("Giá thuê", rent),
+                ("Diện tích", format_area(listing.get("area_m2"))),
+                ("Năm xây", format_year(listing.get("construction_year"))),
+                ("Đi bộ tới ga", format_minutes(walk_minutes)),
             ]
         )
         enrichment_metrics = build_enrichment_metric_items(listing, language=language)
         if enrichment_metrics:
-            section_label = "Ngữ cảnh khu vực" if language == "vi" else "Area context"
+            section_label = "Ngữ cảnh khu vực"
             st.markdown(f'<div class="section-label">{escape(section_label)}</div>', unsafe_allow_html=True)
             render_metric_grid(enrichment_metrics, columns_per_row=3)
 
         metadata_bits: list[str] = []
         if listing.get("management_fee") is not None:
-            label = "Phí quản lý" if language == "vi" else "Mgmt fee"
-            metadata_bits.append(f"{label}: {format_currency(listing.get('management_fee'))}")
+            metadata_bits.append(f"Phí quản lý: {format_currency(listing.get('management_fee'))}")
         if listing.get("floor") is not None:
-            label = "Tầng" if language == "vi" else "Floor"
-            metadata_bits.append(f"{label}: {listing['floor']}")
+            metadata_bits.append(f"Tầng: {listing['floor']}")
         if listing.get("pet_allowed") is True:
-            metadata_bits.append("Cho nuôi thú cưng" if language == "vi" else "Pet allowed")
+            metadata_bits.append("Cho nuôi thú cưng")
         if listing.get("foreigner_friendly") is True:
-            metadata_bits.append("Hỗ trợ người nước ngoài" if language == "vi" else "Foreigner friendly")
+            metadata_bits.append("Hỗ trợ người nước ngoài")
         metadata_bits.extend(build_enrichment_note_bits(listing, language=language))
         if metadata_bits:
             st.markdown(
@@ -830,8 +777,8 @@ def render_listing_card(listing: dict[str, Any], message_index: int, *, language
             )
 
         if listing.get("source_validated") is True and listing.get("source_url"):
-            source_name = listing.get("source_name") or "source"
-            link_label = f"Mở nguồn {source_name}" if language == "vi" else f"Open {source_name}"
+            source_name = listing.get("source_name") or "nguồn"
+            link_label = f"Mở nguồn {source_name}"
             st.link_button(link_label, listing["source_url"])
         st.markdown(
             f'<div class="compact-note">{escape(listing_summary(listing, language=language))}</div>',
@@ -839,7 +786,7 @@ def render_listing_card(listing: dict[str, Any], message_index: int, *, language
         )
 
     with gallery_col:
-        gallery_label = "Hình ảnh" if language == "vi" else "Gallery"
+        gallery_label = "Hình ảnh"
         st.markdown(f'<div class="section-label">{escape(gallery_label)}</div>', unsafe_allow_html=True)
         render_image_gallery(
             listing,
@@ -860,7 +807,7 @@ def render_pagination_controls(total_items: int, message_index: int, *, language
 
     nav_left, nav_center, nav_right = st.columns([1, 2, 1])
     with nav_left:
-        previous_label = "5 kết quả trước" if language == "vi" else "Previous 5"
+        previous_label = "5 kết quả trước"
         if st.button(
             previous_label,
             key=f"page_prev_{message_index}",
@@ -870,12 +817,9 @@ def render_pagination_controls(total_items: int, message_index: int, *, language
             st.session_state[page_key] = current_page - 1
             st.rerun()
     with nav_center:
-        if language == "vi":
-            st.caption(f"Đang hiển thị {start + 1}-{end} trong {total_items} kết quả | Trang {current_page}/{total_pages}")
-        else:
-            st.caption(f"Showing {start + 1}-{end} of {total_items} results | Page {current_page}/{total_pages}")
+        st.caption(f"Đang hiển thị {start + 1}-{end} trong {total_items} kết quả | Trang {current_page}/{total_pages}")
     with nav_right:
-        next_label = "5 kết quả tiếp" if language == "vi" else "Next 5"
+        next_label = "5 kết quả tiếp"
         if st.button(
             next_label,
             key=f"page_next_{message_index}",
@@ -891,7 +835,7 @@ def render_pagination_controls(total_items: int, message_index: int, *, language
 def render_listings(listings: list[dict[str, Any]], message_index: int, *, language: str) -> None:
     if not listings:
         return
-    section_label = "Danh sách đã xếp hạng" if language == "vi" else "Ranked listings"
+    section_label = "Danh sách đã xếp hạng"
     st.markdown(f'<div class="section-label">{escape(section_label)}</div>', unsafe_allow_html=True)
     start, end = render_pagination_controls(len(listings), message_index, language=language)
     for listing in listings[start:end]:
@@ -902,9 +846,9 @@ def render_listings(listings: list[dict[str, Any]], message_index: int, *, langu
 def render_selected_listing_list() -> None:
     known_listings = collect_known_listings()
     selected_ids = st.session_state["selected_listings"]
-    st.subheader("Selected listings")
+    st.subheader("Căn đã chọn")
     if not selected_ids:
-        st.caption("Add at least two listings to compare them.")
+        st.caption("Chọn ít nhất hai căn để so sánh.")
         return
 
     for listing_id in selected_ids:
@@ -923,7 +867,7 @@ def render_comparison(comparison: list[dict[str, Any]]) -> None:
     if not comparison:
         return
     known_listings = collect_known_listings()
-    st.markdown("**Comparison**")
+    st.markdown("**So sánh**")
     columns = st.columns(len(comparison))
     for column, item in zip(columns, comparison):
         listing = known_listings.get(str(item["id"]), {})
@@ -937,21 +881,21 @@ def render_comparison(comparison: list[dict[str, Any]]) -> None:
 
                 render_metric_grid(
                     [
-                        ("Rent", format_currency(item.get("rent_yen"))),
-                        ("Mgmt Fee", format_currency(item.get("management_fee"))),
-                        ("Area", format_area(item.get("area_m2"))),
-                        ("Walk", format_minutes(item.get("walk_min"))),
-                        ("Year Built", format_year(item.get("construction_year"))),
-                        ("Safety", format_score(item.get("overall_safety_score"))),
+                        ("Giá thuê", format_currency(item.get("rent_yen"))),
+                        ("Phí quản lý", format_currency(item.get("management_fee"))),
+                        ("Diện tích", format_area(item.get("area_m2"))),
+                        ("Đi bộ tới ga", format_minutes(item.get("walk_min"))),
+                        ("Năm xây", format_year(item.get("construction_year"))),
+                        ("An toàn", format_score(item.get("overall_safety_score"))),
                     ]
                 )
 
-                render_image_gallery(comparison_listing, gallery_key=f"compare_{item['id']}", max_width_px=220)
+                render_image_gallery(comparison_listing, gallery_key=f"compare_{item['id']}", max_width_px=220, language="vi")
 
-                st.write("Pros")
+                st.write("Điểm mạnh")
                 for pro in item.get("pros", []):
                     st.write(f"- {pro}")
-                st.write("Cons")
+                st.write("Điểm cần cân nhắc")
                 for con in item.get("cons", []):
                     st.write(f"- {con}")
 
@@ -961,10 +905,10 @@ def render_export_file(file_path: str | None, message_index: int) -> None:
     if not resolved or not resolved.exists():
         return
 
-    st.markdown("**Export**")
+    st.markdown("**Tệp xuất**")
     with resolved.open("rb") as handle:
         st.download_button(
-            label=f"Download {resolved.name}",
+            label=f"Tải xuống {resolved.name}",
             data=handle.read(),
             file_name=resolved.name,
             mime="application/octet-stream",
@@ -974,14 +918,14 @@ def render_export_file(file_path: str | None, message_index: int) -> None:
 
 def render_message(message: dict[str, Any], message_index: int, *, show_meta: bool) -> None:
     with st.chat_message(message["role"]):
-        language = effective_message_language(message)
+        language = "vi"
         st.markdown(message["content"])
         render_listings(message.get("listings", []), message_index, language=language)
         render_comparison(message.get("comparison", []))
         render_export_file(message.get("file"), message_index)
         meta = message.get("meta")
         if show_meta and meta:
-            with st.expander("Meta", expanded=False):
+            with st.expander("Thông tin kỹ thuật", expanded=False):
                 st.json(meta, expanded=False)
 
 
@@ -994,32 +938,32 @@ def build_compare_prompt() -> str:
     selected = st.session_state["selected_listings"]
     if len(selected) < 2:
         return ""
-    return "Compare " + " and ".join(selected)
+    return "So sánh " + " và ".join(selected)
 
 
 def render_sidebar(config: AppConfig) -> tuple[int, str]:
     with st.sidebar:
-        st.subheader("Search options")
-        top_k = st.number_input("Result limit", min_value=1, max_value=20, value=config.default_top_k)
-        output_format = st.selectbox("Response format", options=["chat", "json", "csv", "pdf"], index=0)
+        st.subheader("Tùy chọn tìm kiếm")
+        top_k = st.number_input("Số kết quả tối đa", min_value=1, max_value=20, value=config.default_top_k)
+        output_format = st.selectbox("Định dạng phản hồi", options=["chat", "json", "csv", "pdf"], index=0)
 
         st.divider()
         render_selected_listing_list()
 
         compare_prompt = build_compare_prompt()
-        if st.button("Compare Selected", disabled=not compare_prompt, use_container_width=True):
+        if st.button("So sánh các căn đã chọn", disabled=not compare_prompt, use_container_width=True):
             st.session_state["pending_chat_input"] = compare_prompt
-        if st.button("Clear Selected", disabled=not st.session_state["selected_listings"], use_container_width=True):
+        if st.button("Bỏ chọn tất cả", disabled=not st.session_state["selected_listings"], use_container_width=True):
             clear_selected_listings()
             st.rerun()
 
         st.divider()
-        with st.expander("Runtime", expanded=config.app_dev_mode):
-            st.text_input("Chat model", value=config.llm_chat_model, disabled=True)
-            st.text_input("Base URL", value=config.llm_base_url or "", disabled=True)
-            st.text_input("Search provider", value=config.search_provider, disabled=True)
+        with st.expander("Thông tin chạy", expanded=config.app_dev_mode):
+            st.text_input("Model chat", value=config.llm_chat_model, disabled=True)
+            st.text_input("URL nền", value=config.llm_base_url or "", disabled=True)
+            st.text_input("Nguồn tìm kiếm", value=config.search_provider, disabled=True)
             if not config.llm_api_key:
-                st.warning("LLM_API_KEY is not loaded. Fallback mode will be used where applicable.")
+                st.warning("Chưa tải LLM_API_KEY. Ứng dụng sẽ dùng chế độ dự phòng khi phù hợp.")
 
     return int(top_k), output_format
 
@@ -1066,7 +1010,7 @@ def submit_user_message(user_input: str, top_k: int, output_format: str) -> None
     response = agent_service.handle_request(request)
     st.session_state["previous_filters"] = response.data.filters_used
     response_listings = [listing.model_dump() for listing in response.data.listings]
-    response_language = str(response.data.filters_used.get("response_language") or "vi")
+    response_language = "vi"
     response_meta = response.meta.model_dump()
     display_listings = response_listings
     response_content = response.reply
@@ -1131,16 +1075,16 @@ def process_pending_request() -> None:
     if not pending_request:
         return
     with st.chat_message("assistant"):
-        with st.status("Searching and ranking listings...", expanded=True) as status:
-            st.write("Parsing rental criteria")
-            st.write("Searching available sources")
-            st.write("Ranking listings and preparing the response")
+        with st.status("Đang tìm và xếp hạng nhà thuê...", expanded=True) as status:
+            st.write("Đang đọc điều kiện thuê nhà")
+            st.write("Đang tìm trong các nguồn hiện có")
+            st.write("Đang xếp hạng kết quả và chuẩn bị phản hồi")
             submit_user_message(
                 pending_request["user_input"],
                 top_k=int(pending_request["top_k"]),
                 output_format=str(pending_request["output_format"]),
             )
-            status.update(label="Search complete", state="complete", expanded=False)
+            status.update(label="Đã tìm xong", state="complete", expanded=False)
     st.session_state["pending_request"] = None
     st.rerun()
 
@@ -1160,7 +1104,7 @@ def main() -> None:
 
     pending_chat_input = st.session_state.pop("pending_chat_input", None)
     user_input = pending_chat_input or st.chat_input(
-        "Describe the rental home you want, compare selected listings, or export results..."
+        "Nhập nhu cầu thuê nhà, yêu cầu so sánh căn đã chọn, hoặc xuất kết quả..."
     )
     if not user_input:
         return

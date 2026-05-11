@@ -44,6 +44,30 @@ def make_clarification_node(dependencies: AgentDependencies):
                 },
             }
 
+        if intent_label == "search" and missing_fields == ["city"]:
+            reply = _build_city_clarification(response_language)
+            tool_trace.append("search.clarification")
+            return {
+                "tool_trace": tool_trace,
+                "response_payload": {
+                    "status": "need_clarification",
+                    "reply": reply,
+                    "data": {
+                        "filters_used": state.get("parsed_constraints", {}),
+                        "listings": [],
+                        "comparison": [],
+                        "file": None,
+                        "missing_fields": ["city"],
+                    },
+                    "meta": {
+                        "tool_used": tool_trace,
+                        "confidence": state.get("llm_confidence"),
+                        "processing_time_ms": 0,
+                    },
+                    "error": None,
+                },
+            }
+
         draft = dependencies.agent_model.draft_clarification(
             raw_input=state.get("raw_input", ""),
             parsed_constraints=state.get("parsed_constraints", {}),
@@ -74,6 +98,12 @@ def make_clarification_node(dependencies: AgentDependencies):
         }
 
     return clarification_node
+
+
+def _build_city_clarification(language: str) -> str:
+    if language == "en":
+        return "Which city in Japan do you want to search in?"
+    return "Bạn muốn tìm nhà ở thành phố nào?"
 
 
 def _build_compare_clarification(

@@ -58,6 +58,13 @@ def test_parser_detects_vietnamese_search_language(message: str) -> None:
     assert parsed["response_language"] == "vi"
 
 
+@pytest.mark.parametrize("message", ["Sapporo 1LDK", "Sapporo", "8man Sapporo"])
+def test_parser_defaults_search_language_to_vietnamese(message: str) -> None:
+    parsed = QueryParserTool().execute(message)
+
+    assert parsed["response_language"] == "vi"
+
+
 @pytest.mark.parametrize(
     ("message", "expected_max_rent"),
     [

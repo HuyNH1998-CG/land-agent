@@ -56,6 +56,7 @@ Rules:
 - Ask only for the missing information.
 - Keep it concise and natural.
 - Preserve the user's existing constraints.
+- Use user-facing labels, not internal field names. For example, ask for "thành phố" instead of "city".
 - Write the reply in Vietnamese unless the user explicitly requested another language.
 
 User request:
@@ -116,6 +117,7 @@ def build_response_prompt(
 Rules:
 - Mention how many strong matches were found.
 - Summarize the most important constraints used.
+- When results are found, suggest a few additional search conditions the user can add to narrow the results, such as budget, layout, ward/station, minimum area, number of residents, pet policy, or foreigner-friendly listings. Do not repeat conditions already provided.
 - If there are no results, say that clearly and suggest refining filters.
 - Do not claim data that is not present.
 - Keep the answer suitable for chat output.

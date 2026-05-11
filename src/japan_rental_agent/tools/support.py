@@ -53,9 +53,12 @@ def tokenize_text(value: str) -> list[str]:
 
 def detect_language(value: str) -> str:
     normalized = normalize_text(value)
+    normalized_phrase_value = normalize_phrase(value)
+    words = set(normalized_phrase_value.split())
     vietnamese_tokens = [
         "sosanh",
         "timnha",
+        "timcanho",
         "thuenha",
         "nhathue",
         "giathue",
@@ -68,15 +71,46 @@ def detect_language(value: str) -> str:
         "yeucau",
         "chotoi",
         "nguoinuocngoai",
+        "muontim",
+        "timkiem",
     ]
-    vietnamese_words = set(normalize_phrase(value).split())
-    if any(token in normalized for token in vietnamese_tokens):
+    vietnamese_diacritic_pattern = r"[ăâêôơưđàáảãạằắẳẵặầấẩẫậèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ]"
+    english_words = {
+        "apartment",
+        "apartments",
+        "area",
+        "budget",
+        "compare",
+        "download",
+        "export",
+        "find",
+        "layout",
+        "listing",
+        "listings",
+        "location",
+        "maximum",
+        "near",
+        "price",
+        "rental",
+        "rent",
+        "search",
+        "station",
+        "under",
+    }
+    has_vietnamese_signal = (
+        bool(re.search(vietnamese_diacritic_pattern, value.lower()))
+        or any(token in normalized for token in vietnamese_tokens)
+        or {"tim", "nha"} <= words
+        or {"thue", "nha"} <= words
+        or {"can", "ho"} <= words
+        or ("tai" in words and any(token in words for token in {"nha", "can", "phong", "sapporo", "tokyo"}))
+        or len(words & {"toi", "minh", "muon", "duoi", "khoang", "phong", "ga"}) >= 2
+    )
+    if has_vietnamese_signal:
         return "vi"
-    if {"tim", "nha"} <= vietnamese_words or {"thue", "nha"} <= vietnamese_words:
-        return "vi"
-    if "tai" in vietnamese_words and any(token in vietnamese_words for token in {"nha", "can", "phong", "sapporo", "tokyo"}):
-        return "vi"
-    return "en"
+    if words & english_words:
+        return "en"
+    return "vi"
 
 
 def extract_compare_criteria(value: str) -> list[str]:

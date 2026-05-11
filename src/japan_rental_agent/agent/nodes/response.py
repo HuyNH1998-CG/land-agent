@@ -95,6 +95,12 @@ def make_response_node(dependencies: AgentDependencies):
                 filters_used=state.get("filters_used", {}),
                 language=response_language,
             )
+        if normalized_listings and export_format == "chat":
+            draft.reply = _append_refinement_suggestion(
+                draft.reply,
+                filters_used=state.get("filters_used", {}),
+                language=response_language,
+            )
         tool_trace.append("llm.response")
 
         return {
@@ -169,6 +175,55 @@ def _build_search_success_reply(
         f"Tôi tìm được {len(listings)} kết quả công khai tại {city}{budget_text}. "
         "Tất cả kết quả bên dưới đều giữ link nguồn để bạn mở ra kiểm tra chi tiết."
     )
+
+
+def _append_refinement_suggestion(reply: str, *, filters_used: dict[str, Any], language: str) -> str:
+    normalized_reply = unicodedata.normalize("NFKD", reply.lower())
+    normalized_reply = "".join(character for character in normalized_reply if not unicodedata.combining(character))
+    if "thu hep" in normalized_reply or "narrow" in normalized_reply:
+        return reply
+
+    suggestion = _build_refinement_suggestion(filters_used=filters_used, language=language)
+    if not suggestion:
+        return reply
+
+    return f"{reply.rstrip()} {suggestion}"
+
+
+def _build_refinement_suggestion(*, filters_used: dict[str, Any], language: str) -> str:
+    options = [
+        (("max_rent",), "ngân sách tối đa", "maximum budget"),
+        (("preferred_layout",), "loại phòng (1K/1LDK)", "layout (1K/1LDK)"),
+        (("ward", "nearest_station", "station"), "khu/quận hay ga gần nhất", "preferred ward or nearest station"),
+        (("min_area",), "diện tích tối thiểu", "minimum floor area"),
+        (("occupancy",), "số người ở", "number of residents"),
+        (("pet_allowed",), "có nuôi thú cưng không", "whether pets are needed"),
+        (("foreigner_friendly",), "cần căn phù hợp cho người nước ngoài không", "whether it should be foreigner-friendly"),
+    ]
+    missing_labels = [
+        vi_label if language == "vi" else en_label
+        for keys, vi_label, en_label in options
+        if not _has_filter_value(filters_used, keys)
+    ]
+    if not missing_labels:
+        return ""
+
+    labels = _join_suggestion_items(missing_labels[:3], language)
+    if language == "en":
+        return f"You can narrow the search further by adding {labels}."
+    return f"Bạn có thể thu hẹp thêm bằng cách cho tôi biết {labels}."
+
+
+def _has_filter_value(filters_used: dict[str, Any], keys: tuple[str, ...]) -> bool:
+    return any(filters_used.get(key) not in (None, "", [], {}) for key in keys)
+
+
+def _join_suggestion_items(items: list[str], language: str) -> str:
+    if len(items) <= 1:
+        return items[0] if items else ""
+
+    separator = " hoặc " if language == "vi" else " or "
+    return f"{', '.join(items[:-1])}{separator}{items[-1]}"
 
 
 def _build_compare_reply(

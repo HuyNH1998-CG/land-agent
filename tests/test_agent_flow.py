@@ -157,7 +157,7 @@ def test_clarification_path_returns_need_clarification() -> None:
     service = build_service(
         FakeAgentModel(
             intent=IntentExtractionOutput(
-                normalized_query="Need a home",
+                normalized_query="Tìm nhà cho tôi",
                 constraints={},
                 missing_fields=["city"],
                 confidence=0.9,
@@ -171,9 +171,10 @@ def test_clarification_path_returns_need_clarification() -> None:
         search_tool=StaticSearchTool([]),
     )
 
-    response = service.handle_request(AgentRequest(session_id="clarify", message="Find me a rental"))
+    response = service.handle_request(AgentRequest(session_id="clarify", message="Tìm nhà cho tôi"))
 
     assert response.status == "need_clarification"
+    assert response.reply == "Bạn muốn tìm nhà ở thành phố nào?"
     assert response.data.missing_fields == ["city"]
 
 
@@ -186,7 +187,7 @@ def test_success_path_runs_search_and_response_nodes() -> None:
                 missing_fields=[],
                 confidence=0.8,
             ),
-            response=ResponseDraft(reply="I found one strong match for you.", confidence=0.8),
+            response=ResponseDraft(reply="Tôi tìm được một căn phù hợp.", confidence=0.8),
         ),
         search_tool=StaticSearchTool(
             [
@@ -206,10 +207,81 @@ def test_success_path_runs_search_and_response_nodes() -> None:
     response = service.handle_request(AgentRequest(session_id="success", message="Find me a rental in Tokyo"))
 
     assert response.status == "success"
-    assert response.reply == "I found one strong match for you."
+    assert response.reply.startswith("Tôi tìm được một căn phù hợp.")
+    assert "Bạn có thể thu hẹp thêm" in response.reply
+    assert "loại phòng" in response.reply
     assert response.data.listings[0].id == "apt_001"
     assert "search" in response.meta.tool_used
     assert "llm.response" in response.meta.tool_used
+
+
+def test_search_response_suggests_only_missing_refinement_fields() -> None:
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                normalized_query="Tìm nhà ở Sapporo dưới 8 man, 1LDK",
+                constraints={"city": "Sapporo", "max_rent": 80000, "preferred_layout": "1LDK"},
+                missing_fields=[],
+                confidence=0.8,
+            ),
+            response=ResponseDraft(reply="Tôi tìm được 1 căn phù hợp.", confidence=0.8),
+        ),
+        search_tool=StaticSearchTool(
+            [
+                {
+                    "listing_id": "sap_match",
+                    "title": "Sapporo 1LDK",
+                    "city": "Sapporo",
+                    "ward": "Chuo",
+                    "rent_yen": 78000,
+                    "layout": "1LDK",
+                    "station": "Odori",
+                    "walk_min": 5,
+                }
+            ]
+        ),
+    )
+
+    response = service.handle_request(AgentRequest(session_id="refine-search", message="Tìm nhà ở Sapporo dưới 8 man, 1LDK"))
+
+    assert response.status == "success"
+    assert "Bạn có thể thu hẹp thêm" in response.reply
+    assert "ngân sách tối đa" not in response.reply
+    assert "loại phòng" not in response.reply
+    assert "khu/quận hay ga gần nhất" in response.reply
+
+
+def test_short_search_input_keeps_vietnamese_refinement_suggestion() -> None:
+    service = build_service(
+        FakeAgentModel(
+            intent=IntentExtractionOutput(
+                normalized_query="Sapporo 1LDK",
+                constraints={"city": "Sapporo", "preferred_layout": "1LDK"},
+                missing_fields=[],
+                confidence=0.8,
+            ),
+            response=ResponseDraft(reply="Tôi đã tìm được 1 lựa chọn phù hợp.", confidence=0.8),
+        ),
+        search_tool=StaticSearchTool(
+            [
+                {
+                    "listing_id": "sap_short",
+                    "title": "Sapporo 1LDK",
+                    "city": "Sapporo",
+                    "rent_yen": 82000,
+                    "layout": "1LDK",
+                }
+            ]
+        ),
+        parser_tool=QueryParserTool(),
+    )
+
+    response = service.handle_request(AgentRequest(session_id="short-search-language", message="Sapporo 1LDK"))
+
+    assert response.status == "success"
+    assert response.data.filters_used["response_language"] == "vi"
+    assert "Bạn có thể thu hẹp thêm" in response.reply
+    assert "You can narrow" not in response.reply
 
 
 def test_retry_path_retries_search_once_then_succeeds() -> None:
@@ -230,7 +302,8 @@ def test_retry_path_retries_search_once_then_succeeds() -> None:
     response = service.handle_request(AgentRequest(session_id="retry", message="Find me a rental in Tokyo"))
 
     assert response.status == "success"
-    assert response.reply == "Recovered after retry."
+    assert response.reply.startswith("Recovered after retry.")
+    assert "Bạn có thể thu hẹp thêm" in response.reply
     assert flaky_search.calls == 2
 
 

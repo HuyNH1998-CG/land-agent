@@ -110,5 +110,5 @@ def test_listing_summary_is_vietnamese_when_language_is_vi() -> None:
     )
 
     assert "là căn 1LDK" in summary
-    assert "với giá thuê 46,000 JPY" in summary
+    assert "với giá thuê 46,000 yên" in summary
     assert "Nguồn: homes.co.jp." in summary
